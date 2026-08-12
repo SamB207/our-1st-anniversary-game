@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -21,9 +20,7 @@ user-scalable=no">
 }
 
 body {
-
     margin: 0;
-
     min-height: 100vh;
 
     font-family:
@@ -35,27 +32,23 @@ body {
     background:
         linear-gradient(
             135deg,
-            #ffdce9,
-            #fff2f7,
-            #ffd4e4
+            #eadcf7,
+            #fff1f7,
+            #f8dce9
         );
 
-    color: #71394f;
+    color: #633f59;
 
     display: flex;
-
     justify-content: center;
 }
 
-
 .game {
-
     width: 100%;
-
-    max-width: 500px;
+    max-width: 520px;
 
     padding:
-        20px 15px
+        18px 14px
         35px;
 
     text-align: center;
@@ -63,11 +56,10 @@ body {
 
 
 /* =========================
-   MENU BUTTON
+   BACK TO MENU
 ========================= */
 
 .menu-button {
-
     display: inline-block;
 
     margin-bottom: 8px;
@@ -76,7 +68,7 @@ body {
 
     background: white;
 
-    color: #d94f7a;
+    color: #bd5d85;
 
     text-decoration: none;
 
@@ -88,13 +80,11 @@ body {
 
     box-shadow:
         0 4px 12px
-        rgba(120,50,80,0.12);
+        rgba(100,50,90,0.12);
 }
 
 .menu-button:active {
-
     transform: scale(0.95);
-
 }
 
 
@@ -103,19 +93,19 @@ body {
 ========================= */
 
 h1 {
+    color: #b94f7b;
 
-    color: #d94f7a;
+    font-size: 30px;
 
-    font-size: 31px;
-
-    margin: 8px 0 5px;
+    margin: 7px 0 4px;
 }
 
 .subtitle {
-
     font-size: 14px;
 
-    margin-bottom: 15px;
+    line-height: 1.5;
+
+    margin-bottom: 14px;
 }
 
 
@@ -124,7 +114,6 @@ h1 {
 ========================= */
 
 .stats {
-
     display: flex;
 
     justify-content:
@@ -134,9 +123,9 @@ h1 {
 
     border-radius: 18px;
 
-    padding: 10px;
+    padding: 11px;
 
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 
     font-size: 14px;
 
@@ -144,7 +133,11 @@ h1 {
 
     box-shadow:
         0 4px 12px
-        rgba(120,50,80,0.08);
+        rgba(100,50,90,0.08);
+}
+
+.warning {
+    color: #c94d68;
 }
 
 
@@ -153,16 +146,9 @@ h1 {
 ========================= */
 
 #maze {
+    width: min(94vw, 455px);
 
-    width: min(
-        92vw,
-        430px
-    );
-
-    height: min(
-        92vw,
-        430px
-    );
+    height: min(94vw, 455px);
 
     margin: auto;
 
@@ -171,17 +157,17 @@ h1 {
     background: #fff;
 
     border:
-        4px solid #d94f7a;
+        4px solid #bd6a8b;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
     overflow: hidden;
 
     touch-action: none;
 
     box-shadow:
-        0 8px 25px
-        rgba(120,50,80,0.15);
+        0 9px 25px
+        rgba(100,50,90,0.18);
 }
 
 
@@ -190,7 +176,6 @@ h1 {
 ========================= */
 
 .cell {
-
     position: relative;
 
     display: flex;
@@ -199,34 +184,12 @@ h1 {
 
     justify-content: center;
 
-    background: #fff7fa;
+    background: #fff9fc;
 }
 
-
-/* walls */
-
-.wall-top {
-
-    border-top:
-        3px solid #d47b98;
-}
-
-.wall-right {
-
-    border-right:
-        3px solid #d47b98;
-}
-
-.wall-bottom {
-
-    border-bottom:
-        3px solid #d47b98;
-}
-
-.wall-left {
-
-    border-left:
-        3px solid #d47b98;
+.wall {
+    background:
+        #c98cab !important;
 }
 
 
@@ -235,37 +198,29 @@ h1 {
 ========================= */
 
 .player {
-
-    width: 70%;
-
-    height: 70%;
+    width: 72%;
+    height: 72%;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     border-radius: 50%;
 
-    background:
-        #ff9fbe;
+    background: #f58db2;
 
     font-size:
-        clamp(
-            18px,
-            7vw,
-            30px
-        );
+        clamp(14px, 5vw, 27px);
 
     z-index: 3;
 
     box-shadow:
         0 3px 7px
-        rgba(120,50,80,0.2);
+        rgba(100,50,90,0.25);
 
     transition:
-        transform 0.12s ease;
+        transform 0.1s ease;
 }
 
 
@@ -274,33 +229,21 @@ h1 {
 ========================= */
 
 .goal {
-
     font-size:
-        clamp(
-            20px,
-            7vw,
-            32px
-        );
+        clamp(17px, 6vw, 30px);
 
     animation:
         pulse 1.2s infinite;
 }
 
-
 @keyframes pulse {
 
-    0%,100% {
-
-        transform:
-            scale(1);
-
+    0%, 100% {
+        transform: scale(1);
     }
 
     50% {
-
-        transform:
-            scale(1.12);
-
+        transform: scale(1.15);
     }
 
 }
@@ -311,14 +254,13 @@ h1 {
 ========================= */
 
 #message {
-
     min-height: 42px;
 
-    margin: 15px 5px;
-
-    font-weight: bold;
+    margin: 13px 5px;
 
     font-size: 14px;
+
+    font-weight: bold;
 
     line-height: 1.5;
 }
@@ -329,26 +271,22 @@ h1 {
 ========================= */
 
 .controls {
-
     width: 190px;
 
     margin:
-        10px auto;
+        8px auto;
 
     display: grid;
 
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 8px;
+    gap: 7px;
 }
 
-
 .control {
-
     width: 58px;
-
-    height: 52px;
+    height: 50px;
 
     border: none;
 
@@ -356,72 +294,55 @@ h1 {
 
     background: white;
 
-    color: #d94f7a;
+    color: #b94f7b;
 
-    font-size: 22px;
+    font-size: 21px;
 
     font-weight: bold;
 
     box-shadow:
         0 4px 10px
-        rgba(120,50,80,0.12);
+        rgba(100,50,90,0.12);
 }
-
 
 .control:active {
-
-    transform:
-        scale(0.92);
-
+    transform: scale(0.91);
 }
 
-
 .up {
-
     grid-column: 2;
-
 }
 
 .left {
-
     grid-column: 1;
-
     grid-row: 2;
-
 }
 
 .down {
-
     grid-column: 2;
-
     grid-row: 2;
-
 }
 
 .right {
-
     grid-column: 3;
-
     grid-row: 2;
-
 }
 
 
 /* =========================
-   NEW MAZE
+   BUTTONS
 ========================= */
 
 .new-maze {
+    margin-top: 13px;
 
-    margin-top: 15px;
-
-    padding: 12px 20px;
+    padding: 12px 21px;
 
     border: none;
 
     border-radius: 22px;
 
-    background: #d94f7a;
+    background: #bd5d85;
 
     color: white;
 
@@ -431,15 +352,11 @@ h1 {
 
     box-shadow:
         0 5px 12px
-        rgba(120,50,80,0.15);
+        rgba(100,50,90,0.15);
 }
 
-
 .new-maze:active {
-
-    transform:
-        scale(0.95);
-
+    transform: scale(0.95);
 }
 
 
@@ -448,7 +365,6 @@ h1 {
 ========================= */
 
 #result {
-
     display: none;
 
     background: white;
@@ -457,54 +373,47 @@ h1 {
 
     padding: 25px 18px;
 
-    margin-top: 20px;
+    margin-top: 18px;
 
     box-shadow:
         0 10px 30px
-        rgba(120,50,80,0.15);
+        rgba(100,50,90,0.15);
 }
-
 
 .resultEmoji {
-
-    font-size: 60px;
-
+    font-size: 58px;
 }
-
 
 .resultTitle {
+    color: #b94f7b;
 
-    color: #d94f7a;
-
-    font-size: 28px;
-
+    font-size: 27px;
 }
 
-
 .resultMessage {
-
     font-size: 15px;
 
     line-height: 1.7;
-
 }
 
-
 .play-again {
-
     padding: 13px 22px;
 
     border: none;
 
     border-radius: 22px;
 
-    background: #e95b88;
+    background: #bd5d85;
 
     color: white;
 
     font-size: 15px;
 
     font-weight: bold;
+}
+
+.play-again:active {
+    transform: scale(0.95);
 }
 
 </style>
@@ -518,8 +427,6 @@ h1 {
 <div class="game">
 
 
-<!-- MENU -->
-
 <a
     href="index.html"
     class="menu-button">
@@ -530,30 +437,31 @@ h1 {
 
 
 <h1>
-
     🧩 Love Maze 💕
-
 </h1>
 
 
 <div class="subtitle">
 
-    Find your way to my heart! ❤️
+    Find your way to my heart
+    before time runs out. 😈❤️
+
     <br>
-    The maze changes every game! 🔄
+
+    <small>
+        Every game creates a new maze.
+    </small>
 
 </div>
 
-
-<!-- STATS -->
 
 <div class="stats">
 
     <div>
 
-        ⏱️
+        ⏱️ Time:
         <span id="timer">
-            0
+            90
         </span>s
 
     </div>
@@ -561,7 +469,7 @@ h1 {
 
     <div>
 
-        👣
+        👣 Moves:
         <span id="moves">
             0
         </span>
@@ -571,22 +479,19 @@ h1 {
 </div>
 
 
-<!-- MAZE -->
-
 <div id="maze"></div>
 
 
 <div id="message">
 
-    Swipe or use the buttons
-    to move! 💕
+    Swipe or use the arrows
+    to find the ❤️!
 
 </div>
 
 
-<!-- CONTROLS -->
-
 <div class="controls">
+
 
     <button
         class="control up"
@@ -623,6 +528,7 @@ h1 {
 
     </button>
 
+
 </div>
 
 
@@ -634,8 +540,6 @@ h1 {
 
 </button>
 
-
-<!-- RESULT -->
 
 <div id="result">
 
@@ -675,33 +579,47 @@ h1 {
 
 
 /* =========================
-   MAZE SETTINGS
+   GAME SETTINGS
 ========================= */
-
-const SIZE = 11;
 
 
 /*
-   Odd numbers work best
-   for this maze algorithm.
+   15 x 15 makes the maze
+   noticeably harder.
+
+   Because the maze uses
+   odd dimensions, the
+   generator can create
+   proper corridors.
 */
+
+const SIZE = 15;
+
+
+/*
+   90 seconds gives an adult
+   enough time to think but
+   prevents taking forever.
+*/
+
+const TIME_LIMIT = 90;
 
 
 let maze = [];
 
 let player = {
-    x: 0,
-    y: 0
+    x: 1,
+    y: 1
 };
 
 let goal = {
-    x: SIZE - 1,
-    y: SIZE - 1
+    x: SIZE - 2,
+    y: SIZE - 2
 };
 
 let moves = 0;
 
-let seconds = 0;
+let timeLeft = TIME_LIMIT;
 
 let timer;
 
@@ -709,631 +627,63 @@ let gameOver = false;
 
 
 /* =========================
-   CREATE MAZE
+   RANDOM NUMBER
 ========================= */
 
-function generateMaze() {
+function random(min, max) {
+
+    return Math.floor(
+        Math.random() *
+        (max - min + 1)
+    ) + min;
+
+}
 
 
-    /*
-       Start with every cell
-       as a wall.
-    */
+/* =========================
+   SHUFFLE
+========================= */
+
+function shuffle(array) {
+
+    for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            array[i],
+            array[j]
+        ] =
+        [
+            array[j],
+            array[i]
+        ];
+
+    }
+
+    return array;
+
+}
+
+
+/* =========================
+   CREATE EMPTY MAZE
+========================= */
+
+function createEmptyMaze() {
 
     maze = [];
 
-
     for (
         let y = 0;
         y < SIZE;
         y++
     ) {
-
-        maze[y] = [];
-
-        for (
-            let x = 0;
-            x < SIZE;
-            x++
-        ) {
-
-            maze[y][x] = 1;
-
-        }
-
-    }
-
-
-    /*
-       Maze generation using
-       recursive backtracking.
-    */
-
-    function carve(x, y) {
-
-        maze[y][x] = 0;
-
-
-        const directions = [
-
-            [2, 0],
-
-            [-2, 0],
-
-            [0, 2],
-
-            [0, -2]
-
-        ];
-
-
-        /*
-           Shuffle directions
-           to make each maze
-           different.
-        */
-
-        directions.sort(
-            () => Math.random() - 0.5
-        );
-
-
-        for (
-            const direction
-            of directions
-        ) {
-
-            const nx =
-                x + direction[0];
-
-            const ny =
-                y + direction[1];
-
-
-            if (
-                nx > 0 &&
-                nx < SIZE - 1 &&
-                ny > 0 &&
-                ny < SIZE - 1 &&
-                maze[ny][nx] === 1
-            ) {
-
-
-                maze[
-                    y + direction[1] / 2
-                ][
-                    x + direction[0] / 2
-                ] = 0;
-
-
-                carve(nx, ny);
-
-            }
-
-        }
-
-    }
-
-
-    /*
-       Start at top-left.
-    */
-
-    carve(1, 1);
-
-
-    /*
-       Open starting position.
-    */
-
-    maze[1][1] = 0;
-
-
-    /*
-       Open ending position.
-    */
-
-    maze[
-        SIZE - 2
-    ][
-        SIZE - 2
-    ] = 0;
-
-
-    player = {
-
-        x: 1,
-
-        y: 1
-
-    };
-
-
-    goal = {
-
-        x: SIZE - 2,
-
-        y: SIZE - 2
-
-    };
-
-}
-
-
-/* =========================
-   DRAW MAZE
-========================= */
-
-function drawMaze() {
-
-    const mazeElement =
-        document.getElementById(
-            "maze"
-        );
-
-
-    mazeElement.innerHTML = "";
-
-
-    mazeElement.style.gridTemplateColumns =
-        `repeat(${SIZE}, 1fr)`;
-
-
-    mazeElement.style.gridTemplateRows =
-        `repeat(${SIZE}, 1fr)`;
-
-
-    for (
-        let y = 0;
-        y < SIZE;
-        y++
-    ) {
-
-        for (
-            let x = 0;
-            x < SIZE;
-            x++
-        ) {
-
-
-            const cell =
-                document.createElement(
-                    "div"
-                );
-
-
-            cell.className =
-                "cell";
-
-
-            /*
-               Walls
-            */
-
-            if (
-                maze[y][x] === 1
-            ) {
-
-                cell.style.background =
-                    "#e8a6bb";
-
-            }
-
-
-            /*
-               Player
-            */
-
-            if (
-                x === player.x &&
-                y === player.y
-            ) {
-
-                const playerElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                playerElement.className =
-                    "player";
-
-                playerElement.textContent =
-                    "💗";
-
-                cell.appendChild(
-                    playerElement
-                );
-
-            }
-
-
-            /*
-               Goal
-            */
-
-            if (
-                x === goal.x &&
-                y === goal.y
-            ) {
-
-                const goalElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                goalElement.className =
-                    "goal";
-
-                goalElement.textContent =
-                    "❤️";
-
-                cell.appendChild(
-                    goalElement
-                );
-
-            }
-
-
-            mazeElement.appendChild(
-                cell
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================
-   MOVE
-========================= */
-
-function move(dx, dy) {
-
-    if (gameOver) return;
-
-
-    const newX =
-        player.x + dx;
-
-    const newY =
-        player.y + dy;
-
-
-    /*
-       Check boundaries
-    */
-
-    if (
-        newX < 0 ||
-        newX >= SIZE ||
-        newY < 0 ||
-        newY >= SIZE
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-       Check wall
-    */
-
-    if (
-        maze[newY][newX] === 1
-    ) {
-
-        document.getElementById(
-            "message"
-        ).textContent =
-            "💥 Oops! That's a wall!";
-
-        return;
-
-    }
-
-
-    /*
-       Move player
-    */
-
-    player.x = newX;
-
-    player.y = newY;
-
-    moves++;
-
-
-    document.getElementById(
-        "moves"
-    ).textContent =
-        moves;
-
-
-    drawMaze();
-
-
-    /*
-       Check goal
-    */
-
-    if (
-        player.x === goal.x &&
-        player.y === goal.y
-    ) {
-
-        winGame();
-
-    }
-
-}
-
-
-/* =========================
-   WIN
-========================= */
-
-function winGame() {
-
-    gameOver = true;
-
-    clearInterval(timer);
-
-
-    document.getElementById(
-        "result"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "resultEmoji"
-    ).textContent =
-        "🥹💕";
-
-
-    document.getElementById(
-        "resultTitle"
-    ).textContent =
-        "YOU FOUND MY HEART!";
-
-
-    document.getElementById(
-        "resultMessage"
-    ).textContent =
-        "You made it through the maze! ❤️ "
-        +
-        "It took you "
-        +
-        moves +
-        " moves and "
-        +
-        seconds +
-        " seconds. "
-        +
-        "No matter how complicated the path gets, "
-        +
-        "I would always choose you. 🥹💕 "
-        +
-        "Happy Anniversary, my love!";
-
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-function startTimer() {
-
-    clearInterval(timer);
-
-
-    timer = setInterval(
-        function() {
-
-            if (!gameOver) {
-
-                seconds++;
-
-
-                document.getElementById(
-                    "timer"
-                ).textContent =
-                    seconds;
-
-            }
-
-        },
-        1000
-    );
-
-}
-
-
-/* =========================
-   NEW MAZE
-========================= */
-
-function newMaze() {
-
-    clearInterval(timer);
-
-
-    moves = 0;
-
-    seconds = 0;
-
-    gameOver = false;
-
-
-    document.getElementById(
-        "moves"
-    ).textContent =
-        "0";
-
-
-    document.getElementById(
-        "timer"
-    ).textContent =
-        "0";
-
-
-    document.getElementById(
-        "result"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "message"
-    ).textContent =
-        "Swipe or use the buttons to move! 💕";
-
-
-    generateMaze();
-
-    drawMaze();
-
-    startTimer();
-
-}
-
-
-/* =========================
-   SWIPE CONTROLS
-========================= */
-
-let startX = 0;
-
-let startY = 0;
-
-
-const mazeElement =
-    document.getElementById(
-        "maze"
-    );
-
-
-mazeElement.addEventListener(
-    "touchstart",
-    function(event) {
-
-        const touch =
-            event.touches[0];
-
-
-        startX =
-            touch.clientX;
-
-        startY =
-            touch.clientY;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-mazeElement.addEventListener(
-    "touchend",
-    function(event) {
-
-        const touch =
-            event.changedTouches[0];
-
-
-        const endX =
-            touch.clientX;
-
-        const endY =
-            touch.clientY;
-
-
-        const dx =
-            endX - startX;
-
-        const dy =
-            endY - startY;
-
-
-        const threshold = 25;
-
-
-        if (
-            Math.abs(dx) <
-            threshold &&
-            Math.abs(dy) <
-            threshold
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-           Horizontal swipe
-        */
-
-        if (
-            Math.abs(dx) >
-            Math.abs(dy)
-        ) {
-
-            if (dx > 0) {
-
-                move(1, 0);
-
-            }
-
-            else {
-
-                move(-1, 0);
-
-            }
-
-        }
-
-
-        /*
-           Vertical swipe
-        */
-
-        else {
-
-            if (dy > 0) {
-
-                move(0, 1);
-
-            }
-
-            else {
-
-                move(0, -1);
-
-            }
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================
-   START GAME
-========================= */
-
-newMaze();
-
-</script>
-
-</body>
-
-</html>
