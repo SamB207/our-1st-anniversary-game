@@ -302,7 +302,7 @@ button:active {
 
 let playerHealth = 100;
 
-let enemyHealth = 100;
+let enemyHealth = 200;
 
 let gameOver = false;
 
@@ -356,8 +356,8 @@ function enemyAttack() {
 
     const damage =
         Math.floor(
-            Math.random() * 16
-        ) + 8;
+            Math.random() * 11
+        ) + 12;
 
     playerHealth -= damage;
 
@@ -384,8 +384,8 @@ function attack() {
 
     const damage =
         Math.floor(
-            Math.random() * 16
-        ) + 10;
+            Math.random() * 8
+        ) + 5;
 
     enemyHealth -= damage;
 
