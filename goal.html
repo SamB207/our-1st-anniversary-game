@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>Score a Goal! ⚽💕</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dff7e8,
+            #f0fff5,
+            #d8f3e4
+        );
+
+    color: #315c43;
+
+    display: flex;
+
+    justify-content: center;
+}
+
+
+.game {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    padding: 30px 18px;
+
+    text-align: center;
+}
+
+
+h1 {
+
+    color: #328052;
+
+    font-size: 34px;
+
+    margin-bottom: 5px;
+}
+
+
+.subtitle {
+
+    margin-bottom: 20px;
+}
+
+
+/* ==========================
+   GOAL
+========================== */
+
+.goal {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 230px;
+
+    background:
+        linear-gradient(
+            #79c98f,
+            #5fb878
+        );
+
+    border-radius: 20px;
+
+    border:
+        8px solid white;
+
+    box-shadow:
+        inset 0 0 0 3px #42875a,
+        0 10px 25px
+        rgba(50,100,70,0.15);
+
+    overflow: hidden;
+}
+
+
+/* Goal net */
+
+.goal::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 18px,
+            rgba(255,255,255,0.4)
+            19px 20px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 18px,
+            rgba(255,255,255,0.4)
+            19px 20px
+        );
+
+}
+
+
+/* ==========================
+   GOALKEEPER
+========================== */
+
+.goalkeeper {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    font-size: 65px;
+
+    z-index: 2;
+
+    transition:
+        left 0.3s ease;
+}
+
+
+/* ==========================
+   BALL
+========================== */
+
+.ball {
+
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    font-size: 45px;
+
+    z-index: 3;
+
+    transition:
+        all 0.5s ease;
+}
+
+
+/* ==========================
+   SCORE
+========================== */
+
+.stats {
+
+    margin: 18px 0;
+
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+
+/* ==========================
+   SHOOTING BUTTONS
+========================== */
+
+.shooting {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.shoot {
+
+    padding: 16px 5px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: white;
+
+    color: #39734d;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 5px 12px
+        rgba(50,100,70,0.12);
+}
+
+
+.shoot:active {
+
+    transform: scale(0.94);
+
+}
+
+
+/* ==========================
+   MESSAGE
+========================== */
+
+#message {
+
+    min-height: 45px;
+
+    margin: 18px 5px;
+
+    font-weight: bold;
+
+}
+
+
+/* ==========================
+   RESULT
+========================== */
+
+#result {
+
+    display: none;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 25px 20px;
+
+    margin-top: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(50,100,70,0.15);
+}
+
+
+.resultEmoji {
+
+    font-size: 60px;
+}
+
+
+.resultTitle {
+
+    color: #328052;
+
+    font-size: 28px;
+}
+
+
+.restart {
+
+    padding: 13px 25px;
+
+    border: none;
+
+    border-radius: 25px;
+
+    background: #4b9b65;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+
+    <h1>
+        ⚽ Score for Love! 💕
+    </h1>
+
+
+    <div class="subtitle">
+
+        You have 3 tries to score! 🥅
+
+    </div>
+
+
+    <div class="stats">
+
+        Tries:
+        <span id="tries">
+            3
+        </span>
+
+        &nbsp; | &nbsp;
+
+        Goals:
+        <span id="goals">
+            0
+        </span>
+
+    </div>
+
+
+    <!-- GOAL -->
+
+    <div class="goal">
+
+        <div
+            class="goalkeeper"
+            id="goalkeeper">
+
+            🧍
+
+        </div>
+
+
+        <div
+            class="ball"
+            id="ball">
+
+            ⚽
+
+        </div>
+
+    </div>
+
+
+    <div id="message">
+
+        Choose where you want to shoot! 💕
+
+    </div>
+
+
+    <!-- SHOOTING -->
+
+    <div class="shooting">
+
+        <button
+            class="shoot"
+            onclick="shoot('left')">
+
+            ⬅️
+            <br>
+            Left
+
+        </button>
+
+
+        <button
+            class="shoot"
+            onclick="shoot('center')">
+
+            ⬆️
+            <br>
+            Center
+
+        </button>
+
+
+        <button
+            class="shoot"
+            onclick="shoot('right')">
+
+            ➡️
+            <br>
+            Right
+
+        </button>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div id="result">
+
+        <div
+            class="resultEmoji"
+            id="resultEmoji">
+        </div>
+
+
+        <h2
+            class="resultTitle"
+            id="resultTitle">
+        </h2>
+
+
+        <p id="resultMessage"></p>
+
+
+        <button
+            class="restart"
+            onclick="restartGame()">
+
+            🔄 Play Again
+
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+let tries = 3;
+
+let goals = 0;
+
+let gameOver = false;
+
+
+const goalkeeper =
+    document.getElementById(
+        "goalkeeper"
+    );
+
+const ball =
+    document.getElementById(
+        "ball"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+function shoot(direction) {
+
+    if (gameOver) return;
+
+
+    /*
+       Random goalkeeper position
+    */
+
+    const positions = [
+        "left",
+        "center",
+        "right"
+    ];
+
+
+    const keeperPosition =
+        positions[
+            Math.floor(
+                Math.random() * 3
+            )
+        ];
+
+
+    /*
+       Move goalkeeper
+    */
+
+    if (
+        keeperPosition === "left"
+    ) {
+
+        goalkeeper.style.left =
+            "22%";
+
+    }
+
+    else if (
+        keeperPosition === "right"
+    ) {
+
+        goalkeeper.style.left =
+            "78%";
+
+    }
+
+    else {
+
+        goalkeeper.style.left =
+            "50%";
+
+    }
+
+
+    /*
+       Move ball
+    */
+
+    if (direction === "left") {
+
+        ball.style.left = "22%";
+
+        ball.style.bottom = "140px";
+
+    }
+
+    else if (
+        direction === "right"
+    ) {
+
+        ball.style.left = "78%";
+
+        ball.style.bottom = "140px";
+
+    }
+
+    else {
+
+        ball.style.left = "50%";
+
+        ball.style.bottom = "160px";
+
+    }
+
+
+    tries--;
+
+
+    document.getElementById(
+        "tries"
+    ).textContent = tries;
+
+
+    /*
+       GOAL
+    */
+
+    if (
+        direction !== keeperPosition
+    ) {
+
+        goals++;
+
+
+        document.getElementById(
+            "goals"
+        ).textContent = goals;
+
+
+        message.textContent =
+            "⚽ GOOOOAL! You scored! ❤️";
+
+
+        if (navigator.vibrate) {
+
+            navigator.vibrate(80);
+
+        }
+
+    }
+
+
+    /*
+       BLOCKED
+    */
+
+    else {
+
+        message.textContent =
+            "😭 The goalkeeper blocked it!";
+
+    }
+
+
+    /*
+       Check if finished
+    */
+
+    if (tries === 0) {
+
+        setTimeout(
+            finishGame,
+            800
+        );
+
+    }
+
+}
+
+
+/* ==========================
+   FINISH
+========================== */
+
+function finishGame() {
+
+    gameOver = true;
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    if (goals > 0) {
+
+        document.getElementById(
+            "resultEmoji"
+        ).textContent =
+            "🏆⚽❤️";
+
+
+        document.getElementById(
+            "resultTitle"
+        ).textContent =
+            "GOAL! YOU WON!";
+
+
+        document.getElementById(
+            "resultMessage"
+        ).textContent =
+            "You scored "
+            + goals +
+            " goal"
+            + (goals > 1 ? "s" : "")
+            + "! 🥰💕 "
+            +
+            "Looks like you know how to score "
+            +
+            "your way straight into my heart. "
+            +
+            "Happy Anniversary! ❤️";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "resultEmoji"
+        ).textContent =
+            "😭⚽💔";
+
+
+        document.getElementById(
+            "resultTitle"
+        ).textContent =
+            "NO GOALS!";
+
+
+        document.getElementById(
+            "resultMessage"
+        ).textContent =
+            "Awww, you missed all three! 😂 "
+            +
+            "Don't worry... you may have lost "
+            +
+            "the game, but you still have my heart. ❤️";
+
+    }
+
+}
+
+
+/* ==========================
+   RESTART
+========================== */
+
+function restartGame() {
+
+    tries = 3;
+
+    goals = 0;
+
+    gameOver = false;
+
+
+    document.getElementById(
+        "tries"
+    ).textContent = "3";
+
+
+    document.getElementById(
+        "goals"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "none";
+
+
+    message.textContent =
+        "Choose where you want to shoot! 💕";
+
+
+    goalkeeper.style.left =
+        "50%";
+
+
+    ball.style.left =
+        "50%";
+
+    ball.style.bottom =
+        "20px";
+
+}
+
+</script>
+
+</body>
+
+</html>
