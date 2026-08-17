@@ -30,11 +30,7 @@ body {
         sans-serif;
 
     background:
-        linear-gradient(
-            135deg,
-            #eadcf7,
-            #fff1f7,
-            #f8dce9
+        radial-gradient(circle at center, #ffe4c4, #f5deb3, #bc8f8f)
         );
 
     color: #633f59;
@@ -687,3 +683,778 @@ function createEmptyMaze() {
         y < SIZE;
         y++
     ) {
+
+        maze[y] = [];
+
+        for (
+            let x = 0;
+            x < SIZE;
+            x++
+        ) {
+
+            maze[y][x] = 1;
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   GENERATE MAZE
+========================= */
+
+function generateMaze() {
+
+    createEmptyMaze();
+
+
+    /*
+       Recursive backtracking.
+
+       This creates a maze where
+       the player always has a
+       legitimate path to the end.
+    */
+
+    function carve(x, y) {
+
+        maze[y][x] = 0;
+
+
+        let directions = [
+
+            [2, 0],
+
+            [-2, 0],
+
+            [0, 2],
+
+            [0, -2]
+
+        ];
+
+
+        shuffle(directions);
+
+
+        for (
+            const [dx, dy]
+            of directions
+        ) {
+
+            const nx = x + dx;
+
+            const ny = y + dy;
+
+
+            if (
+                nx > 0 &&
+                nx < SIZE - 1 &&
+                ny > 0 &&
+                ny < SIZE - 1 &&
+                maze[ny][nx] === 1
+            ) {
+
+                maze[
+                    y + dy / 2
+                ][
+                    x + dx / 2
+                ] = 0;
+
+
+                carve(nx, ny);
+
+            }
+
+        }
+
+    }
+
+
+    carve(1, 1);
+
+
+    player = {
+        x: 1,
+        y: 1
+    };
+
+
+    goal = {
+        x: SIZE - 2,
+        y: SIZE - 2
+    };
+
+
+    maze[
+        goal.y
+    ][
+        goal.x
+    ] = 0;
+
+
+    /*
+       Add a few extra openings.
+
+       This creates alternate routes
+       and prevents every maze from
+       feeling exactly the same.
+    */
+
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
+
+        const x =
+            random(1, SIZE - 2);
+
+        const y =
+            random(1, SIZE - 2);
+
+
+        if (
+            x % 2 === 1 ||
+            y % 2 === 1
+        ) {
+
+            maze[y][x] = 0;
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   DRAW MAZE
+========================= */
+
+function drawMaze() {
+
+    const mazeElement =
+        document.getElementById(
+            "maze"
+        );
+
+
+    mazeElement.innerHTML = "";
+
+
+    mazeElement.style.gridTemplateColumns =
+        `repeat(${SIZE}, 1fr)`;
+
+
+    mazeElement.style.gridTemplateRows =
+        `repeat(${SIZE}, 1fr)`;
+
+
+    for (
+        let y = 0;
+        y < SIZE;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < SIZE;
+            x++
+        ) {
+
+            const cell =
+                document.createElement(
+                    "div"
+                );
+
+
+            cell.className =
+                "cell";
+
+
+            /*
+               Wall
+            */
+
+            if (
+                maze[y][x] === 1
+            ) {
+
+                cell.classList.add(
+                    "wall"
+                );
+
+            }
+
+
+            /*
+               Player
+            */
+
+            if (
+                x === player.x &&
+                y === player.y
+            ) {
+
+                const playerElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                playerElement.className =
+                    "player";
+
+                playerElement.textContent =
+                    "💗";
+
+                cell.appendChild(
+                    playerElement
+                );
+
+            }
+
+
+            /*
+               Goal
+            */
+
+            if (
+                x === goal.x &&
+                y === goal.y
+            ) {
+
+                const goalElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                goalElement.className =
+                    "goal";
+
+                goalElement.textContent =
+                    "❤️";
+
+                cell.appendChild(
+                    goalElement
+                );
+
+            }
+
+
+            mazeElement.appendChild(
+                cell
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   MOVE PLAYER
+========================= */
+
+function move(dx, dy) {
+
+    if (gameOver) return;
+
+
+    const newX =
+        player.x + dx;
+
+    const newY =
+        player.y + dy;
+
+
+    /*
+       Don't allow moving
+       outside the maze.
+    */
+
+    if (
+        newX < 0 ||
+        newX >= SIZE ||
+        newY < 0 ||
+        newY >= SIZE
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Wall collision.
+    */
+
+    if (
+        maze[newY][newX] === 1
+    ) {
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "💥 Dead end! Try another path.";
+
+        return;
+
+    }
+
+
+    /*
+       Move.
+    */
+
+    player.x = newX;
+
+    player.y = newY;
+
+    moves++;
+
+
+    document.getElementById(
+        "moves"
+    ).textContent =
+        moves;
+
+
+    drawMaze();
+
+
+    /*
+       Check if player reached
+       the heart.
+    */
+
+    if (
+        player.x === goal.x &&
+        player.y === goal.y
+    ) {
+
+        winGame();
+
+    }
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer() {
+
+    clearInterval(timer);
+
+
+    timer = setInterval(
+        function() {
+
+            if (gameOver) return;
+
+
+            timeLeft--;
+
+
+            document.getElementById(
+                "timer"
+            ).textContent =
+                timeLeft;
+
+
+            /*
+               Make timer red
+               during final 15 seconds.
+            */
+
+            if (
+                timeLeft <= 15
+            ) {
+
+                document.getElementById(
+                    "timer"
+                ).classList.add(
+                    "warning"
+                );
+
+            }
+
+
+            if (
+                timeLeft <= 0
+            ) {
+
+                loseGame();
+
+            }
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================
+   WIN GAME
+========================= */
+
+function winGame() {
+
+    if (gameOver) return;
+
+
+    gameOver = true;
+
+    clearInterval(timer);
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultEmoji"
+    ).textContent =
+        "🥹💕";
+
+
+    document.getElementById(
+        "resultTitle"
+    ).textContent =
+        "YOU FOUND MY HEART!";
+
+
+    let performance;
+
+
+    if (
+        timeLeft >= 60
+    ) {
+
+        performance =
+            "Okayyy, speed demon! 😳🔥";
+
+    }
+
+    else if (
+        timeLeft >= 30
+    ) {
+
+        performance =
+            "That was pretty good! 😌💕";
+
+    }
+
+    else {
+
+        performance =
+            "You really had me worried there! 😂";
+
+    }
+
+
+    document.getElementById(
+        "resultMessage"
+    ).textContent =
+
+        performance +
+
+        " You made it through the maze "
+        +
+        "in "
+        +
+        moves
+        +
+        " moves with "
+        +
+        timeLeft
+        +
+        " seconds left. ❤️ "
+
+        +
+
+        "Maybe finding my heart "
+        +
+        "was worth the challenge. 🥹💗 "
+
+        +
+
+        "Happy Anniversary, my love!";
+
+
+
+    document.getElementById(
+        "result"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   LOSE GAME
+========================= */
+
+function loseGame() {
+
+    if (gameOver) return;
+
+
+    gameOver = true;
+
+    clearInterval(timer);
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultEmoji"
+    ).textContent =
+        "😭💔";
+
+
+    document.getElementById(
+        "resultTitle"
+    ).textContent =
+        "TIME'S UP!";
+
+
+    document.getElementById(
+        "resultMessage"
+    ).textContent =
+
+        "The maze won this round. 😂💗 "
+
+        +
+
+        "You made "
+        +
+        moves
+        +
+        " moves, but couldn't reach "
+        +
+        "my heart before time ran out. "
+
+        +
+
+        "Maybe try a different path next time. 😈❤️";
+
+
+
+    document.getElementById(
+        "result"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   NEW MAZE
+========================= */
+
+function newMaze() {
+
+    clearInterval(timer);
+
+
+    moves = 0;
+
+    timeLeft = TIME_LIMIT;
+
+    gameOver = false;
+
+
+    document.getElementById(
+        "moves"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "timer"
+    ).textContent =
+        TIME_LIMIT;
+
+
+    document.getElementById(
+        "timer"
+    ).classList.remove(
+        "warning"
+    );
+
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        "Swipe or use the arrows to find the ❤️!";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "none";
+
+
+    generateMaze();
+
+    drawMaze();
+
+    startTimer();
+
+}
+
+
+/* =========================
+   SWIPE CONTROLS
+========================= */
+
+let startX = 0;
+
+let startY = 0;
+
+
+const mazeElement =
+    document.getElementById(
+        "maze"
+    );
+
+
+mazeElement.addEventListener(
+    "touchstart",
+    function(event) {
+
+        const touch =
+            event.touches[0];
+
+
+        startX =
+            touch.clientX;
+
+        startY =
+            touch.clientY;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+mazeElement.addEventListener(
+    "touchend",
+    function(event) {
+
+        const touch =
+            event.changedTouches[0];
+
+
+        const endX =
+            touch.clientX;
+
+        const endY =
+            touch.clientY;
+
+
+        const dx =
+            endX - startX;
+
+        const dy =
+            endY - startY;
+
+
+        const threshold = 25;
+
+
+        /*
+           Ignore tiny touches.
+        */
+
+        if (
+            Math.abs(dx) <
+            threshold &&
+            Math.abs(dy) <
+            threshold
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+           Horizontal swipe.
+        */
+
+        if (
+            Math.abs(dx) >
+            Math.abs(dy)
+        ) {
+
+            if (dx > 0) {
+
+                move(1, 0);
+
+            }
+
+            else {
+
+                move(-1, 0);
+
+            }
+
+        }
+
+
+        /*
+           Vertical swipe.
+        */
+
+        else {
+
+            if (dy > 0) {
+
+                move(0, 1);
+
+            }
+
+            else {
+
+                move(0, -1);
+
+            }
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+newMaze();
+
+</script>
+
+</body>
+
+</html>
