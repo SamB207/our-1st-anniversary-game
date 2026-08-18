@@ -1,1 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>Chess Battle ♟️</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8d5ff,
+            #f8efff,
+            #d9c5ff
+        );
+
+    color: #49345f;
+
+    display: flex;
+    justify-content: center;
+}
+
+.game {
+
+    width: 100%;
+    max-width: 520px;
+
+    padding:
+        20px 12px
+        35px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.menu-button {
+
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    padding: 10px 18px;
+
+    background: white;
+
+    color: #7651a8;
+
+    text-decoration: none;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 4px 12px
+        rgba(70,40,100,0.12);
+}
+
+.menu-button:active {
+    transform: scale(.95);
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+h1 {
+
+    color: #7046a3;
+
+    font-size: 31px;
+
+    margin: 8px 0 4px;
+}
+
+.subtitle {
+
+    font-size: 14px;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+.score {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.score-box {
+
+    flex: 1;
+
+    background: white;
+
+    padding: 9px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 12px
+        rgba(70,40,100,.10);
+
+    font-size: 13px;
+}
+
+.score-box strong {
+
+    display: block;
+
+    font-size: 18px;
+
+    margin-top: 2px;
+}
+
+
+/* =========================
+   CHESS BOARD
+========================= */
+
+.board {
+
+    width: min(
+        96vw,
+        500px
+    );
+
+    aspect-ratio: 1 / 1;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(8, 1fr);
+
+    border-radius: 13px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 30px
+        rgba(60,35,90,.25);
+
+    border:
+        4px solid white;
+}
+
+.square {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size:
+        clamp(
+            30px,
+            10vw,
+            52px
+        );
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        background .12s;
+}
+
+.light {
+
+    background: #ead9c4;
+}
+
+.dark {
+
+    background: #9b704f;
+}
+
+
+/* selected square */
+
+.selected {
+
+    box-shadow:
+        inset 0 0 0 5px
+        rgba(255,235,80,.9);
+}
+
+
+/* possible moves */
+
+.possible::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 22%;
+
+    height: 22%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.65);
+}
+
+
+/* capture */
+
+.capture::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 72%;
+
+    height: 72%;
+
+    border-radius: 50%;
+
+    border:
+        5px solid
+        rgba(255,90,90,.75);
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+#message {
+
+    min-height: 45px;
+
+    margin: 15px 5px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.control {
+
+    border: none;
+
+    border-radius: 17px;
+
+    padding: 13px 8px;
+
+    background: white;
+
+    color: #59406f;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+    box-shadow:
+        0 5px 14px
+        rgba(70,40,100,.12);
+}
+
+.control:active {
+
+    transform: scale(.95);
+}
+
+
+/* =========================
+   DIFFICULTY
+========================= */
+
+.difficulty {
+
+    margin-top: 14px;
+
+    background:
+        rgba(255,255,255,.65);
+
+    padding: 10px;
+
+    border-radius: 15px;
+
+    font-size: 13px;
+}
+
+select {
+
+    margin-left: 5px;
+
+    border: none;
+
+    padding: 6px 9px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #49345f;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+#result {
+
+    display: none;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 25px 18px;
+
+    margin-top: 18px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(60,35,90,.16);
+}
+
+.resultEmoji {
+
+    font-size: 55px;
+}
+
+.resultTitle {
+
+    color: #7046a3;
+
+    font-size: 28px;
+}
+
+.resultMessage {
+
+    line-height: 1.6;
+
+    font-size: 15px;
+}
+
+.restart {
+
+    margin-top: 10px;
+
+    padding: 13px 25px;
+
+    border: none;
+
+    border-radius: 25px;
+
+    background: #7046a3;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   CHESS PIECES
+========================= */
+
+.white-piece {
+
+    color: #fff;
+
+    text-shadow:
+        0 2px 2px #333,
+        0 0 2px #333;
+}
+
+.black-piece {
+
+    color: #171717;
+
+    text-shadow:
+        0 1px 1px #fff;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="game">
+
+
+<a
+    href="index.html"
+    class="menu-button">
+
+    🏠 Back to Menu
+
+</a>
+
+
+<h1>
+    ♟️ Chess Battle
+</h1>
+
+
+<div class="subtitle">
+
+    You vs AI • 50/50 fair play • No cheating 🤖
+
+</div>
+
+
+<div class="score">
+
+    <div class="score-box">
+
+        ♙ You
+
+        <strong id="playerSide">
+            White
+        </strong>
+
+    </div>
+
+    <div class="score-box">
+
+        🤖 AI
+
+        <strong id="aiSide">
+            Black
+        </strong>
+
+    </div>
+
+</div>
+
+
+<div
+    id="board"
+    class="board">
+</div>
+
+
+<div id="message">
+
+    Your turn. Choose a piece.
+
+</div>
+
+
+<div class="difficulty">
+
+    🤖 AI Difficulty:
+
+    <select id="difficulty"
+            onchange="restartGame()">
+
+        <option value="1">
+            Easy
+        </option>
+
+        <option value="2">
+            Medium
+        </option>
+
+        <option value="3"
+                selected>
+            Hard
+        </option>
+
+        <option value="4">
+            Very Hard
+        </option>
+
+    </select>
+
+</div>
+
+
+<div class="controls">
+
+    <button
+        class="control"
+        onclick="newGame()">
+
+        🔄 New Game
+
+    </button>
+
+
+    <button
+        class="control"
+        onclick="flipBoard()">
+
+        🔃 Flip Board
+
+    </button>
+
+</div>
+
+
+<div id="result">
+
+    <div
+        class="resultEmoji"
+        id="resultEmoji">
+    </div>
+
+    <h2
+        class="resultTitle"
+        id="resultTitle">
+    </h2>
+
+    <p
+        class="resultMessage"
+        id="resultMessage">
+    </p>
+
+    <button
+        class="restart"
+        onclick="newGame()">
+
+        ♟️ Play Again
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/*
+=================================================
+CHESS GAME
+=================================================
+
+50/50 FAIRNESS:
+
+The AI does NOT receive:
+
+• extra pieces
+• extra moves
+• extra health
+• illegal moves
+• hidden information
+
+Both sides follow exactly the same rules.
+
+The AI is difficult because it searches ahead.
+
+=================================================
+*/
+
+
+/* =========================
+   PIECES
+========================= */
+
+const pieces = {
+
+    wp: "♙",
+    wr: "♖",
+    wn: "♘",
+    wb: "♗",
+    wq: "♕",
+    wk: "♔",
+
+    bp: "♟",
+    br: "♜",
+    bn: "♞",
+    bb: "♝",
+    bq: "♛",
+    bk: "♚"
+
+};
+
+
+/* =========================
+   INITIAL BOARD
+========================= */
+
+const startingBoard = [
+
+    ["br","bn","bb","bq","bk","bb","bn","br"],
+
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+
+    [null,null,null,null,null,null,null,null],
+
+    [null,null,null,null,null,null,null,null],
+
+    [null,null,null,null,null,null,null,null],
+
+    [null,null,null,null,null,null,null,null],
+
+    ["wp","wp","wp","wp","wp","wp","wp","wp"],
+
+    ["wr","wn","wb","wq","wk","wb","wn","wr"]
+
+];
+
+
+let board = [];
+
+let selected = null;
+
+let currentTurn = "w";
+
+let gameOver = false;
+
+let boardFlipped = false;
+
+let moveHistory = [];
+
+
+/* =========================
+   VALUES
+========================= */
+
+const values = {
+
+    p: 100,
+    n: 320,
+    b: 330,
+    r: 500,
+    q: 900,
+    k: 20000
+
+};
+
+
+/* =========================
+   COPY BOARD
+========================= */
+
+function copyBoard(b) {
+
+    return b.map(
+        row => [...row]
+    );
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function newGame() {
+
+    board =
+        copyBoard(
+            startingBoard
+        );
+
+    selected = null;
+
+    currentTurn = "w";
+
+    gameOver = false;
+
+    moveHistory = [];
+
+    document.getElementById(
+        "result"
+    ).style.display = "none";
+
+    /*
+       50/50 chance of playing
+       White or Black.
+    */
+
+    const playerIsWhite =
+        Math.random() < 0.5;
+
+    window.playerColor =
+        playerIsWhite ? "w" : "b";
+
+    window.aiColor =
+        playerIsWhite ? "b" : "w";
+
+    document.getElementById(
+        "playerSide"
+    ).textContent =
+        playerIsWhite
+            ? "White"
+            : "Black";
+
+    document.getElementById(
+        "aiSide"
+    ).textContent =
+        playerIsWhite
+            ? "Black"
+            : "White";
+
+    document.getElementById(
+        "message"
+    ).textContent =
+        playerIsWhite
+            ? "Your turn. Choose a piece. ♟️"
+            : "AI starts as White... 🤖";
+
+    drawBoard();
+
+    /*
+       If player gets Black,
+       AI makes the first move.
+    */
+
+    if (
+        window.playerColor === "b"
+    ) {
+
+        setTimeout(
+            aiMove,
+            500
+        );
+
+    }
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+function restartGame() {
+
+    newGame();
+
+}
+
+
+/* =========================
+   DRAW BOARD
+========================= */
+
+function drawBoard() {
+
+    const boardElement =
+        document.getElementById(
+            "board"
+        );
+
+    boardElement.innerHTML = "";
+
+    for (
+        let visualRow = 0;
+        visualRow < 8;
+        visualRow++
+    ) {
+
+        for (
+            let visualCol = 0;
+            visualCol < 8;
+            visualCol++
+        ) {
+
+            let row =
+                boardFlipped
+                    ? 7 - visualRow
+                    : visualRow;
+
+            let col =
+                boardFlipped
+                    ? 7 - visualCol
+                    : visualCol;
+
+            const square =
+                document.createElement(
+                    "div"
+                );
+
+            square.className =
+                "square " +
+                (
+                    (row + col) % 2 === 0
+                        ? "light"
+                        : "dark"
+                );
+
+            square.dataset.row = row;
+
+            square.dataset.col = col;
+
+
+            const piece =
+                board[row][col];
+
+
+            if (piece) {
+
+                square.textContent =
+                    pieces[piece];
+
+                square.classList.add(
+                    piece[0] === "w"
+                        ? "white-piece"
+                        : "black-piece"
+                );
+
+            }
+
+
+            /*
+               Selected square
+            */
+
+            if (
+                selected &&
+                selected.r === row &&
+                selected.c === col
+            ) {
+
+                square.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            /*
+               Possible moves
+            */
+
+            if (
+                selected
+            ) {
+
+                const moves =
+                    getLegalMoves(
+                        selected.r,
+                        selected.c,
+                        board
+                    );
+
+                const possible =
+                    moves.some(
+                        m =>
+                            m.r === row &&
+                            m.c === col
+                    );
+
+                if (possible) {
+
+                    if (
+                        board[row][col]
+                    ) {
+
+                        square.classList.add(
+                            "capture"
+                        );
+
+                    }
+
+                    else {
+
+                        square.classList.add(
+                            "possible"
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            square.onclick =
+                () => squareClicked(
+                    row,
+                    col
+                );
+
+
+            boardElement.appendChild(
+                square
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   SQUARE CLICK
+========================= */
+
+function squareClicked(r,c) {
+
+    if (
+        gameOver ||
+        currentTurn !== window.playerColor
+    ) return;
+
+
+    const piece =
+        board[r][c];
+
+
+    /*
+       Selecting a piece
+    */
+
+    if (
+        !selected
+    ) {
+
+        if (
+            piece &&
+            piece[0] === window.playerColor
+        ) {
+
+            selected = {
+                r,
+                c
+            };
+
+            drawBoard();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+       Selecting another own piece
+    */
+
+    if (
+        piece &&
+        piece[0] === window.playerColor
+    ) {
+
+        selected = {
+            r,
+            c
+        };
+
+        drawBoard();
+
+        return;
+
+    }
+
+
+    const moves =
+        getLegalMoves(
+            selected.r,
+            selected.c,
+            board
+        );
+
+
+    const move =
+        moves.find(
+            m =>
+                m.r === r &&
+                m.c === c
+        );
+
+
+    if (!move) {
+
+        document.getElementById(
+            "message"
+        ).text
