@@ -32,15 +32,9 @@ body {
         "Segoe UI",
         sans-serif;
 
-    background:
-         radial-gradient(
-        circle at center,
-            #959d90,
-            #f2fff6,
-            #d7f3e3
-        );
+    background: #394831; /* Main Background Color */
 
-    color: #315c43;
+    color: #c0c0c0; /* Silver Text */
 
     display: flex;
 
@@ -74,9 +68,9 @@ body {
 
     padding: 9px 17px;
 
-    background: #e8d9cd;
+    background: #8b6c5c; /* Brown Accent */
 
-    color: #523d35;
+    color: #ffffff;
 
     text-decoration: none;
 
@@ -86,9 +80,11 @@ body {
 
     font-weight: bold;
 
+    border: 1px solid #c0c0c0; /* Silver Accent */
+
     box-shadow:
         0 4px 12px
-        rgba(50,100,70,0.12);
+        rgba(0,0,0,0.25);
 }
 
 .menu-button:active {
@@ -105,7 +101,7 @@ body {
 
 h1 {
 
-    color: #523d35;
+    color: #e0e0e0; /* Silver Accent */
 
     font-size: 31px;
 
@@ -116,6 +112,8 @@ h1 {
 .subtitle {
 
     font-size: 14px;
+
+    color: #c0c0c0;
 
     margin-bottom: 15px;
 }
@@ -132,7 +130,9 @@ h1 {
     justify-content:
         space-around;
 
-    background: white;
+    background: #3e2723; /* Earthy Dark Brown */
+
+    color: #e0e0e0;
 
     padding: 11px;
 
@@ -144,9 +144,11 @@ h1 {
 
     font-weight: bold;
 
+    border: 1px solid #c0c0c0; /* Silver Border */
+
     box-shadow:
         0 4px 12px
-        rgba(50,100,70,0.08);
+        rgba(0,0,0,0.3);
 }
 
 
@@ -162,14 +164,10 @@ h1 {
 
     height: 245px;
 
-    background:
-        linear-gradient(
-            #79c98f,
-            #58b675
-        );
+    background: #5d4037; /* Earthy Brown Pitch */
 
     border:
-        7px solid white;
+        7px solid #c0c0c0; /* Silver Goal Posts */
 
     border-radius: 18px;
 
@@ -177,7 +175,7 @@ h1 {
 
     box-shadow:
         0 8px 25px
-        rgba(50,100,70,0.18);
+        rgba(0,0,0,0.4);
 
     touch-action: none;
 }
@@ -198,14 +196,14 @@ h1 {
         repeating-linear-gradient(
             90deg,
             transparent 0 17px,
-            rgba(255,255,255,0.38)
+            rgba(192,192,192,0.3) /* Silver Net Grid */
             18px 19px
         ),
 
         repeating-linear-gradient(
             0deg,
             transparent 0 17px,
-            rgba(255,255,255,0.38)
+            rgba(192,192,192,0.3)
             18px 19px
         );
 
@@ -281,6 +279,8 @@ h1 {
 
     line-height: 1.5;
 
+    color: #e0e0e0;
+
 }
 
 
@@ -303,13 +303,13 @@ h1 {
 
 .shot {
 
-    border: none;
+    border: 1px solid #c0c0c0; /* Silver Border */
 
     border-radius: 18px;
 
-    background: white;
+    background: #3e2723; /* Earthy Dark Brown */
 
-    color: #397a50;
+    color: #ffffff;
 
     padding: 14px 4px;
 
@@ -319,7 +319,9 @@ h1 {
 
     box-shadow:
         0 5px 12px
-        rgba(50,100,70,0.12);
+        rgba(0,0,0,0.25);
+
+    cursor: pointer;
 }
 
 
@@ -337,7 +339,7 @@ h1 {
 
     margin-top: 4px;
 
-    color: #7d9d87;
+    color: #c0c0c0; /* Silver Text */
 
     font-size: 10px;
 
@@ -354,7 +356,9 @@ h1 {
 
     display: none;
 
-    background: white;
+    background: #3e2723; /* Earthy Dark Brown */
+
+    border: 2px solid #c0c0c0; /* Silver Border */
 
     border-radius: 25px;
 
@@ -364,7 +368,7 @@ h1 {
 
     box-shadow:
         0 10px 30px
-        rgba(50,100,70,0.15);
+        rgba(0,0,0,0.4);
 }
 
 
@@ -377,7 +381,7 @@ h1 {
 
 .resultTitle {
 
-    color: #328052;
+    color: #e0e0e0; /* Silver Title */
 
     font-size: 28px;
 
@@ -390,6 +394,8 @@ h1 {
 
     line-height: 1.7;
 
+    color: #c0c0c0;
+
 }
 
 
@@ -399,17 +405,19 @@ h1 {
 
     padding: 13px 23px;
 
-    border: none;
+    border: 1px solid #c0c0c0;
 
     border-radius: 22px;
 
-    background: #4b9b65;
+    background: #8b6c5c; /* Brown Accent */
 
     color: white;
 
     font-size: 15px;
 
     font-weight: bold;
+
+    cursor: pointer;
 }
 
 
@@ -716,46 +724,30 @@ function shoot(direction) {
 
 
     /*
-       Goalkeeper AI
-    */
-
-    const positions = [
-
-        "left",
-
-        "center",
-
-        "right"
-
-    ];
-
-
-    /*
-       15% chance goalkeeper
-       waits in center
+       Goalkeeper AI - Weighted for ~55% total game loss chance
+       55% of the time, the keeper guesses the player's shot correctly
     */
 
     let keeperPosition;
 
 
     if (
-        Math.random() < 0.15
+        Math.random() < 0.55
     ) {
 
-        keeperPosition =
-            "center";
+        keeperPosition = direction; // Keeper reads and guesses your shot!
 
     }
 
     else {
 
-        keeperPosition =
-            positions[
-                random(
-                    0,
-                    2
-                )
-            ];
+        const otherPositions = [
+            "left",
+            "center",
+            "right"
+        ].filter(pos => pos !== direction);
+
+        keeperPosition = otherPositions[random(0, 1)];
 
     }
 
@@ -882,8 +874,6 @@ function resolveShot(
 
     /*
        Base chance of scoring.
-
-       The center is slightly harder.
     */
 
     let goalChance;
@@ -905,10 +895,8 @@ function resolveShot(
 
 
     /*
-       Goalkeeper guessed
-       correctly.
-
-       Much harder.
+       Goalkeeper guessed correctly.
+       Much harder to score.
     */
 
     if (
@@ -916,25 +904,19 @@ function resolveShot(
         keeperPosition
     ) {
 
-        goalChance = 0.12;
+        goalChance = 0.10;
 
     }
 
 
     /*
-       Small chance of completely
-       missing the goal.
+       Determine goal vs save
     */
 
     if (
         Math.random() >
         goalChance
     ) {
-
-        /*
-           Decide whether it was
-           blocked or missed.
-        */
 
         if (
             direction ===
@@ -988,8 +970,7 @@ function resolveShot(
 
 
     /*
-       Check if player already
-       reached 2 goals.
+       Check if player reached 2 goals
     */
 
     if (
