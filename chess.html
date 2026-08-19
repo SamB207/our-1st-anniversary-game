@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Ensures proper scaling on iPhone and mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Mobile Chess Game</title>
+  <title>Love Chess - Play vs. Cupid</title>
   <style>
     * {
       box-sizing: border-box;
-      user-select: none; /* Prevents text selection on mobile taps */
+      user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
     }
@@ -17,7 +16,7 @@
       margin: 0;
       padding: 20px 10px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #f4f4f9;
+      background: linear-gradient(135deg, #ffe6ea 0%, #fbd3e9 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -26,63 +25,61 @@
     }
 
     h2 {
-      margin: 0 0 10px 0;
-      color: #333;
+      margin: 0 0 5px 0;
+      color: #d6336c;
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #a61e4d;
+      margin-bottom: 12px;
     }
 
     #status {
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: #a61e4d;
+      text-align: center;
     }
 
-    /* Mobile Responsive Board Container */
+    /* Romantic Board Styling */
     #board {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
       width: 100%;
-      max-width: 400px; /* Limits size on larger screens */
+      max-width: 400px;
       aspect-ratio: 1 / 1;
-      border: 3px solid #333;
-      border-radius: 4px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border: 4px solid #d6336c;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(214, 51, 108, 0.25);
       touch-action: manipulation;
+      overflow: hidden;
     }
 
     .square {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: min(10vw, 42px); /* Scales font dynamically based on screen width */
+      font-size: min(10vw, 42px);
       cursor: pointer;
+      transition: background-color 0.2s ease;
     }
 
-    /* Board Colors */
+    /* Soft Pink Board Colors */
     .light {
-      background-color: #f0d9b5;
+      background-color: #fff0f3;
     }
 
     .dark {
-      background-color: #b58863;
+      background-color: #f7aef8;
     }
 
-    /* Touch Highlighting */
+    /* Selected & Highlight States */
     .selected {
-      background-color: #7bc043 !important;
-    }
-
-    .possible-move {
-      position: relative;
-    }
-
-    .possible-move::after {
-      content: '';
-      width: 30%;
-      height: 30%;
-      background-color: rgba(0, 0, 0, 0.25);
-      border-radius: 50%;
+      background-color: #ff85a1 !important;
     }
 
     button {
@@ -91,36 +88,81 @@
       font-size: 1rem;
       font-weight: bold;
       color: #fff;
-      background-color: #007aff; /* iOS Blue */
+      background: linear-gradient(45deg, #ff4d6d, #d6336c);
       border: none;
-      border-radius: 8px;
+      border-radius: 25px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.3);
+      transition: transform 0.1s ease;
     }
 
     button:active {
-      opacity: 0.8;
+      transform: scale(0.96);
+    }
+
+    /* Love Message Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 3px solid #ff4d6d;
+    }
+
+    .modal-content h3 {
+      color: #d6336c;
+      margin-top: 0;
+    }
+
+    .modal-content p {
+      color: #495057;
+      font-size: 1rem;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
 
-  <h2>Chess</h2>
-  <div id="status">Turn: White</div>
+  <h2>💖 Love Chess 💖</h2>
+  <div class="subtitle">You (White) vs. Cupid AI (Black)</div>
+  <div id="status">Your turn, sweetheart! ✨</div>
   <div id="board"></div>
-  <button onclick="resetGame()">New Game</button>
+  <button onclick="resetGame()">Start New Game 💕</button>
+
+  <!-- Winner / Loser Popup -->
+  <div id="loveModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle"></h3>
+      <p id="modalMessage"></p>
+      <button onclick="closeModal()">Play Again 💌</button>
+    </div>
+  </div>
 
   <script>
     const boardElement = document.getElementById('board');
     const statusElement = document.getElementById('status');
+    const modal = document.getElementById('loveModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
 
-    // Unicode Chess Symbols
     const pieces = {
       'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
       'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
     };
 
-    // Initial Board Setup
     const initialBoard = [
       ['r','n','b','q','k','b','n','r'],
       ['p','p','p','p','p','p','p','p'],
@@ -134,21 +176,18 @@
 
     let gameState = [];
     let selectedSquare = null;
-    let turn = 'white'; // 'white' (uppercase) or 'black' (lowercase)
+    let turn = 'white'; // 'white' = Player, 'black' = Cupid AI
+    let gameOver = false;
 
-    function isWhite(piece) {
-      return piece && piece === piece.toUpperCase();
-    }
-
-    function isBlack(piece) {
-      return piece && piece === piece.toLowerCase();
-    }
+    function isWhite(piece) { return piece && piece === piece.toUpperCase(); }
+    function isBlack(piece) { return piece && piece === piece.toLowerCase(); }
 
     function initGame() {
       gameState = JSON.parse(JSON.stringify(initialBoard));
       turn = 'white';
       selectedSquare = null;
-      statusElement.textContent = "Turn: White";
+      gameOver = false;
+      statusElement.textContent = "Your turn, sweetheart! ✨";
       renderBoard();
     }
 
@@ -163,15 +202,12 @@
           square.dataset.col = c;
 
           const piece = gameState[r][c];
-          if (piece) {
-            square.textContent = pieces[piece];
-          }
+          if (piece) square.textContent = pieces[piece];
 
           if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
             square.classList.add('selected');
           }
 
-          // Use touchstart and click to ensure instant response on iOS
           square.addEventListener('click', () => handleSquareTap(r, c));
           boardElement.appendChild(square);
         }
@@ -179,12 +215,12 @@
     }
 
     function handleSquareTap(r, c) {
+      if (gameOver || turn !== 'white') return;
+
       const piece = gameState[r][c];
 
-      // If a square is already selected, attempt to move
       if (selectedSquare) {
         if (selectedSquare.r === r && selectedSquare.c === c) {
-          // Tap selected square again to deselect
           selectedSquare = null;
           renderBoard();
           return;
@@ -192,41 +228,118 @@
 
         const currentPiece = gameState[selectedSquare.r][selectedSquare.c];
 
-        // Ensure you don't take your own piece
-        if ((turn === 'white' && isWhite(piece)) || (turn === 'black' && isBlack(piece))) {
-          // Switch selection to new piece
+        // Prevent capturing your own pieces
+        if (isWhite(piece)) {
           selectedSquare = { r, c };
           renderBoard();
           return;
         }
 
-        // Execute move
-        gameState[r][c] = currentPiece;
-        gameState[selectedSquare.r][selectedSquare.c] = '';
+        // Check if captured King
+        if (piece === 'k') {
+          executeMove(selectedSquare.r, selectedSquare.c, r, c);
+          showLoveMessage(true);
+          return;
+        }
+
+        // Make Move
+        executeMove(selectedSquare.r, selectedSquare.c, r, c);
         selectedSquare = null;
-
-        // Switch turn
-        turn = turn === 'white' ? 'black' : 'white';
-        statusElement.textContent = `Turn: ${turn.charAt(0).toUpperCase() + turn.slice(1)}`;
-
+        turn = 'black';
+        statusElement.textContent = "Cupid is thinking... 💘";
         renderBoard();
+
+        // Cupid AI Turn
+        setTimeout(cupidAIMove, 600);
         return;
       }
 
-      // First Tap: Select piece belonging to current turn
-      if (piece) {
-        if ((turn === 'white' && isWhite(piece)) || (turn === 'black' && isBlack(piece))) {
-          selectedSquare = { r, c };
-          renderBoard();
+      if (piece && isWhite(piece)) {
+        selectedSquare = { r, c };
+        renderBoard();
+      }
+    }
+
+    function executeMove(fromR, fromC, toR, toC) {
+      gameState[toR][toC] = gameState[fromR][fromC];
+      gameState[fromR][fromC] = '';
+    }
+
+    // Cupid AI logic
+    function cupidAIMove() {
+      if (gameOver) return;
+
+      let possibleMoves = [];
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (isBlack(gameState[r][c])) {
+            // Find all neighboring or forward spaces for basic AI move
+            const moves = [
+              { r: r + 1, c: c },
+              { r: r + 1, c: c - 1 },
+              { r: r + 1, c: c + 1 },
+              { r: r, c: c - 1 },
+              { r: r, c: c + 1 }
+            ];
+
+            moves.forEach(m => {
+              if (m.r >= 0 && m.r < 8 && m.c >= 0 && m.c < 8) {
+                const target = gameState[m.r][m.c];
+                if (!isBlack(target)) {
+                  possibleMoves.push({
+                    from: { r, c },
+                    to: m,
+                    capturesKing: target === 'K'
+                  });
+                }
+              }
+            });
+          }
         }
       }
+
+      if (possibleMoves.length > 0) {
+        // Prioritize capturing Player King
+        let kingCapture = possibleMoves.find(m => m.capturesKing);
+        let move = kingCapture || possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+
+        if (move.capturesKing) {
+          executeMove(move.from.r, move.from.c, move.to.r, move.to.c);
+          renderBoard();
+          showLoveMessage(false);
+          return;
+        }
+
+        executeMove(move.from.r, move.from.c, move.to.r, move.to.c);
+      }
+
+      turn = 'white';
+      statusElement.textContent = "Your turn, sweetheart! ✨";
+      renderBoard();
+    }
+
+    function showLoveMessage(didWin) {
+      gameOver = true;
+      if (didWin) {
+        modalTitle.textContent = "🎉 You Won My Heart! 💖";
+        modalMessage.textContent = "You defeated Cupid! Every move you make captured my heart. I love you so much! 💕";
+      } else {
+        modalTitle.textContent = "💘 Cupid Got You!";
+        modalMessage.textContent = "Cupid won this round, but you'll always be my #1 victory! Try again, my love? 🥰";
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      initGame();
     }
 
     function resetGame() {
       initGame();
     }
 
-    // Start game on page load
     initGame();
   </script>
 </body>
