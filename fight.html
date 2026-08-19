@@ -1,350 +1,1135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkmate, My Bae 👑♟️</title>
-  
-  <!-- Chessboard.js CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
 
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #9B1F21; /* Main Background */
-      color: #e0e0e0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>Love Battle ⚔️💕</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #394831; /* Background Theme Color */
+
+    color: #c0c0c0; /* Silver Accent Text */
+
+    display: flex;
+
+    justify-content: center;
+}
+
+
+.game {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    padding:
+        25px 18px
+        35px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   BACK TO MENU
+========================= */
+
+.menu-button {
+
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    padding: 10px 18px;
+
+    background: #710004; /* Main Color */
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    border: 1px solid #c0c0c0; /* Silver Border */
+
+    box-shadow:
+        0 4px 12px
+        rgba(0,0,0,0.3);
+}
+
+.menu-button:active {
+
+    transform: scale(0.95);
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+h1 {
+
+    color: #e0e0e0; /* Silver Highlight */
+
+    font-size: 32px;
+
+    margin: 8px 0 5px;
+}
+
+
+.subtitle {
+
+    margin-bottom: 20px;
+
+    font-size: 15px;
+
+    color: #c0c0c0;
+}
+
+
+/* =========================
+   FIGHTERS
+========================= */
+
+.fighters {
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    margin: 20px 0;
+
+    background: #3e2723; /* Dark Earthy Brown */
+
+    padding: 15px;
+
+    border-radius: 20px;
+
+    border: 1px solid #c0c0c0;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+
+.fighter {
+
+    font-size: 65px;
+
+    transition: transform 0.2s;
+}
+
+
+.fighter.hit {
+
+    transform:
+        translateX(12px)
+        rotate(8deg);
+
+}
+
+
+.vs {
+
+    font-weight: bold;
+
+    font-size: 22px;
+
+    color: #710004; /* Main Accent */
+
+    background: #c0c0c0;
+
+    padding: 4px 10px;
+
+    border-radius: 12px;
+}
+
+
+/* =========================
+   HEALTH BARS
+========================= */
+
+.health-box {
+
+    margin: 13px 0;
+
+    background: #3e2723;
+
+    padding: 10px 14px;
+
+    border-radius: 16px;
+
+    border: 1px solid #5d4037;
+}
+
+
+.name {
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+
+    color: #e0e0e0;
+
+    text-align: left;
+}
+
+
+.health {
+
+    width: 100%;
+
+    height: 18px;
+
+    background: #1a1a1a;
+
+    border-radius: 20px;
+
+    border: 1px solid #c0c0c0;
+
+    overflow: hidden;
+}
+
+
+.health-fill {
+
+    height: 100%;
+
+    width: 100%;
+
+    background: #710004; /* Main Color for Player Health */
+
+    transition: width 0.35s ease;
+}
+
+
+.enemy-bar {
+
+    background: #8b6c5c; /* Silver/Brown Accent for Enemy */
+}
+
+
+/* =========================
+   BATTLE MESSAGE
+========================= */
+
+#battleMessage {
+
+    min-height: 45px;
+
+    margin: 18px 5px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    line-height: 1.4;
+
+    color: #e0e0e0;
+}
+
+
+/* =========================
+   MOVES
+========================= */
+
+.moves {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.move {
+
+    border: 1px solid #c0c0c0;
+
+    border-radius: 18px;
+
+    padding: 15px 8px;
+
+    background: #710004; /* Main Color Buttons */
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 5px 14px
+        rgba(0,0,0,0.3);
+
+    cursor: pointer;
+}
+
+
+.move:active {
+
+    transform: scale(0.95);
+
+}
+
+
+.move small {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    font-weight: normal;
+
+    color: #c0c0c0;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+
+    margin-top: 15px;
+
+    padding: 10px;
+
+    border-radius: 15px;
+
+    background: #3e2723;
+
+    border: 1px solid #c0c0c0;
+
+    font-size: 13px;
+
+    color: #e0e0e0;
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+#result {
+
+    display: none;
+
+    background: #3e2723;
+
+    border: 2px solid #c0c0c0;
+
+    border-radius: 25px;
+
+    padding: 28px 20px;
+
+    margin-top: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.5);
+
+    animation: appear 0.5s ease;
+}
+
+
+.resultEmoji {
+
+    font-size: 60px;
+
+}
+
+
+.resultTitle {
+
+    color: #e0e0e0;
+
+    font-size: 29px;
+
+    margin: 10px 0;
+}
+
+
+.resultMessage {
+
+    font-size: 16px;
+
+    line-height: 1.7;
+
+    color: #c0c0c0;
+}
+
+
+.restart {
+
+    margin-top: 15px;
+
+    padding: 13px 25px;
+
+    border: 1px solid #c0c0c0;
+
+    border-radius: 25px;
+
+    background: #710004;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.restart:active {
+
+    transform: scale(0.95);
+
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes appear {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(15px);
+
     }
 
-    .game-card {
-      background: #3e2723; /* Earthy Dark Brown */
-      border: 3px solid #c0c0c0; /* Silver Accent Border */
-      padding: 24px;
-      border-radius: 20px;
-      max-width: 450px;
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      position: relative;
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
     }
 
-    /* Back to Menu Button Styling */
-    .menu-button {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 9px 17px;
-      background: #8b6c5c;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      transition: transform 0.1s ease;
-      cursor: pointer;
-      border: 1px solid #c0c0c0;
-    }
+}
 
-    .menu-button:active {
-      transform: scale(0.95);
-    }
+</style>
 
-    h1 {
-      font-size: 22px;
-      margin-top: 0;
-      margin-bottom: 12px;
-      color: #d4e157; /* Earthy Light Olive/Silver Tint */
-    }
-
-    .status {
-      font-size: 14px;
-      color: #c0c0c0; /* Silver */
-      margin-bottom: 16px;
-      min-height: 20px;
-      font-weight: 500;
-    }
-
-    #board {
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto 16px auto;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      border: 2px solid #556b2f; /* Dark Olive Green Border */
-    }
-
-    /* Board Custom Colors */
-    .white-1e1d3 {
-      background-color: #c0c0c0 !important; /* Silver Light Squares */
-      color: #3e2723 !important;
-    }
-
-    .black-3c85d {
-      background-color: #4f6d52 !important; /* Earthy Sage Green Dark Squares */
-      color: #ffffff !important;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .btn-action {
-      background: #4f6d52; /* Earthy Green */
-      color: #ffffff;
-      border: 1px solid #c0c0c0; /* Silver border */
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn-action:hover {
-      background: #3b523d; /* Darker Earthy Green */
-    }
-
-    .btn-action:active {
-      transform: scale(0.95);
-    }
-
-    /* Game Over Message Overlay */
-    .modal-overlay {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(30, 20, 15, 0.92);
-      border-radius: 18px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      color: #d4e157;
-    }
-
-    .modal-message {
-      font-size: 16px;
-      line-height: 1.5;
-      color: #c0c0c0;
-      margin-bottom: 20px;
-    }
-  </style>
 </head>
+
+
 <body>
 
-  <div class="game-card">
-    <a href="index.html" class="menu-button">← Back to Menu</a>
 
-    <h1>Checkmate, My Bae 👑♟️</h1>
-    <div class="status" id="status">Your turn! (You play as White)</div>
+<div class="game">
 
-    <div id="board"></div>
 
-    <div class="controls">
-      <button class="btn-action" id="resetBtn">Restart Game 🔄</button>
-      <button class="btn-action" id="undoBtn">Undo Move ↩️</button>
+<!-- BACK TO MENU -->
+
+<a href="index.html" class="menu-button">
+
+    🏠 Back to Menu
+
+</a>
+
+
+<h1>Love Battle ⚔️</h1>
+
+
+<div class="subtitle">
+
+    Choose your moves wisely... 😈💕
+
+</div>
+
+
+<!-- FIGHTERS -->
+
+<div class="fighters">
+
+    <div>
+
+        <div class="fighter" id="playerEmoji">🐼</div>
+
+        <strong>You</strong>
+
     </div>
 
-    <!-- Win/Loss Message Pop-up -->
-    <div class="modal-overlay" id="resultModal">
-      <div class="modal-title" id="modalTitle">Game Over</div>
-      <div class="modal-message" id="modalMessage">Message text here...</div>
-      <button class="btn-action" onclick="closeModal()">Play Again 🔄</button>
+
+    <div class="vs">VS</div>
+
+
+    <div>
+
+        <div class="fighter" id="enemyEmoji">🐻</div>
+
+        <strong>Opponent</strong>
+
     </div>
-  </div>
 
-  <!-- Dependencies -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+</div>
 
-  <script>
-    let board = null;
-    const game = new Chess();
-    const statusEl = document.getElementById('status');
-    const modalEl = document.getElementById('resultModal');
-    const modalTitleEl = document.getElementById('modalTitle');
-    const modalMessageEl = document.getElementById('modalMessage');
 
-    // Values for basic AI evaluation (adjusts computer difficulty for ~55% Win / 49% Loss probability split)
-    const pieceValues = {
-      p: 10,
-      n: 30,
-      b: 30,
-      r: 50,
-      q: 90,
-      k: 900
-    };
+<!-- PLAYER HEALTH -->
 
-    function onDragStart(source, piece, position, orientation) {
-      if (game.game_over()) return false;
-      if (piece.search(/^b/) !== -1) return false; // Player plays as White
-    }
+<div class="health-box">
 
-    // AI logic weighted for ~55% win / ~49% loss balance
-    function makeWeightedMove() {
-      const possibleMoves = game.moves({ verbose: true });
-      if (possibleMoves.length === 0) return;
+    <div class="name">
 
-      // 55% chance AI picks a purely random move (gives player advantage to reach 55% win)
-      // 45% chance AI picks a smart/tactical move (gives AI ~49% chance to win)
-      const playSmart = Math.random() > 0.55;
+        Your Health: <span id="playerHealthText">100</span> HP
 
-      let chosenMove;
+    </div>
 
-      if (playSmart) {
-        // Find moves that capture pieces or checkmate
-        let bestScore = -Infinity;
-        let bestMoves = [];
+    <div class="health">
 
-        possibleMoves.forEach((move) => {
-          let score = 0;
-          if (move.captured) {
-            score += pieceValues[move.captured] * 10;
-          }
-          if (move.san.includes('#')) {
-            score += 10000;
-          }
-          if (move.san.includes('+')) {
-            score += 50;
-          }
+        <div class="health-fill" id="playerHealth"></div>
 
-          if (score > bestScore) {
-            bestScore = score;
-            bestMoves = [move];
-          } else if (score === bestScore) {
-            bestMoves.push(move);
-          }
-        });
+    </div>
 
-        chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
-      } else {
-        // Pick a random move
-        chosenMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-      }
+</div>
 
-      game.move(chosenMove);
-      board.position(game.fen());
-      updateStatus();
-    }
 
-    function onDrop(source, target) {
-      const move = game.move({
-        from: source,
-        to: target,
-        promotion: 'q'
-      });
+<!-- ENEMY HEALTH -->
 
-      if (move === null) return 'snapback';
+<div class="health-box">
 
-      updateStatus();
+    <div class="name">
 
-      if (!game.game_over()) {
-        statusEl.innerText = "Thinking... 🤔";
-        window.setTimeout(makeWeightedMove, 350);
-      }
-    }
+        Opponent Health: <span id="enemyHealthText">120</span> HP
 
-    function onSnapEnd() {
-      board.position(game.fen());
-    }
+    </div>
 
-    function updateStatus() {
-      let statusText = '';
+    <div class="health">
 
-      if (game.in_checkmate()) {
-        if (game.turn() === 'w') {
-          statusText = 'Game Over: Checkmate!';
-          showGameOver(false);
-        } else {
-          statusText = 'Game Over: You Won!';
-          showGameOver(true);
-        }
-      } else if (game.in_draw()) {
-        statusText = 'Game Over: Draw / Stalemate 🤝';
-        showDraw();
-      } else {
-        statusText = game.turn() === 'w' ? 'Your turn! (White)' : 'Computer turn... (Black)';
-        if (game.in_check()) {
-          statusText += ' — Check! ⚠️';
-        }
-      }
+        <div class="health-fill enemy-bar" id="enemyHealth"></div>
 
-      statusEl.innerText = statusText;
-    }
+    </div>
 
-    function showGameOver(isWin) {
-      if (isWin) {
-        modalTitleEl.innerText = "YOU WIN! 🏆👑";
-        modalMessageEl.innerText = "You totally outsmarted me! You're a true grandmaster and you've conquered my heart! ❤️ Bright side: you owe me a victory kiss! 😘";
-      } else {
-        modalTitleEl.innerText = "CHECKMATE! 🖤♟️";
-        modalMessageEl.innerText = "Aww, good try! You lost this round, but you still win my heart forever. ❤️ Rematch time?";
-      }
-      modalEl.style.display = 'flex';
-    }
+</div>
 
-    function showDraw() {
-      modalTitleEl.innerText = "STALEMATE! 🤝";
-      modalMessageEl.innerText = "It's a tie! We really are perfectly matched for each other 💕";
-      modalEl.style.display = 'flex';
-    }
 
-    function closeModal() {
-      modalEl.style.display = 'none';
-      resetGame();
-    }
+<!-- MESSAGE -->
 
-    function resetGame() {
-      game.reset();
-      board.position('start');
-      updateStatus();
-    }
+<div id="battleMessage">
 
-    const config = {
-      draggable: true,
-      position: 'start',
-      onDragStart: onDragStart,
-      onDrop: onDrop,
-      onSnapEnd: onSnapEnd,
-      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
-    };
+    Choose your move! ⚔️
 
-    board = Chessboard('board', config);
-    updateStatus();
+</div>
 
-    document.getElementById('resetBtn').addEventListener('click', resetGame);
 
-    document.getElementById('undoBtn').addEventListener('click', () => {
-      game.undo(); // Undo computer move
-      game.undo(); // Undo player move
-      board.position(game.fen());
-      updateStatus();
+<!-- MOVES -->
+
+<div class="moves">
+
+
+    <button class="move" onclick="attack()">
+
+        ⚔️ Attack
+
+        <small>Reliable damage</small>
+
+    </button>
+
+
+    <button class="move" onclick="heavyAttack()">
+
+        💥 Heavy Attack
+
+        <small>Powerful, but risky</small>
+
+    </button>
+
+
+    <button class="move" onclick="heal()">
+
+        💖 Heal
+
+        <small>3 uses left: <span id="healCount">3</span></small>
+
+    </button>
+
+
+    <button class="move" onclick="block()">
+
+        🛡️ Block
+
+        <small>Reduce next attack</small>
+
+    </button>
+
+
+</div>
+
+
+<div class="status">
+
+    Block status: <span id="blockStatus">Not active</span>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div id="result">
+
+    <div class="resultEmoji" id="resultEmoji"></div>
+
+
+    <h2 class="resultTitle" id="resultTitle"></h2>
+
+
+    <p class="resultMessage" id="resultMessage"></p>
+
+
+    <button class="restart" onclick="restartGame()">
+
+        🔄 Fight Again
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+let playerHealth = 100;
+
+let enemyHealth = 120;
+
+let healUses = 3;
+
+let blocking = false;
+
+let gameOver = false;
+
+let playerTurn = true;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const playerHealthBar = document.getElementById("playerHealth");
+
+const enemyHealthBar = document.getElementById("enemyHealth");
+
+const playerHealthText = document.getElementById("playerHealthText");
+
+const enemyHealthText = document.getElementById("enemyHealthText");
+
+const battleMessage = document.getElementById("battleMessage");
+
+const healCount = document.getElementById("healCount");
+
+const blockStatus = document.getElementById("blockStatus");
+
+const playerEmoji = document.getElementById("playerEmoji");
+
+const enemyEmoji = document.getElementById("enemyEmoji");
+
+
+/* =========================
+   UPDATE HEALTH
+========================= */
+
+function updateHealth() {
+
+    playerHealthBar.style.width = playerHealth + "%";
+
+    enemyHealthBar.style.width = (enemyHealth / 120 * 100) + "%";
+
+
+    playerHealthText.textContent = playerHealth;
+
+    enemyHealthText.textContent = enemyHealth;
+
+    healCount.textContent = healUses;
+
+}
+
+
+/* =========================
+   RANDOM NUMBER
+========================= */
+
+function random(min, max) {
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+}
+
+
+/* =========================
+   DISABLE / ENABLE MOVES
+========================= */
+
+function disableMoves() {
+
+    document.querySelectorAll(".move").forEach(button => {
+
+        button.disabled = true;
+
+        button.style.opacity = "0.5";
+
     });
-  </script>
+
+}
+
+
+function enableMoves() {
+
+    document.querySelectorAll(".move").forEach(button => {
+
+        button.disabled = false;
+
+        button.style.opacity = "1";
+
+    });
+
+
+    if (healUses <= 0) {
+
+        const healBtn = document.querySelectorAll(".move")[2];
+
+        healBtn.disabled = true;
+
+        healBtn.style.opacity = "0.4";
+
+    }
+
+}
+
+
+/* =========================
+   ANIMATE HIT
+========================= */
+
+function triggerHitAnimation(element) {
+
+    element.classList.add("hit");
+
+    setTimeout(() => {
+
+        element.classList.remove("hit");
+
+    }, 200);
+
+}
+
+
+/* =========================
+   PLAYER ATTACK
+========================= */
+
+function attack() {
+
+    if (gameOver || !playerTurn) return;
+
+
+    playerTurn = false;
+
+    disableMoves();
+
+    triggerHitAnimation(playerEmoji);
+
+
+    let damage = random(8, 15);
+
+
+    if (Math.random() < 0.12) {
+
+        damage *= 2;
+
+        battleMessage.textContent = "💥 CRITICAL HIT! Dealt " + damage + " damage!";
+
+    } else {
+
+        battleMessage.textContent = "⚔️ You dealt " + damage + " damage!";
+
+    }
+
+
+    if (Math.random() < 0.15) {
+
+        damage = Math.floor(damage * 0.4);
+
+        battleMessage.textContent = "🛡️ They blocked! Only dealt " + damage + " damage.";
+
+    }
+
+
+    enemyHealth -= damage;
+
+    if (enemyHealth < 0) enemyHealth = 0;
+
+
+    updateHealth();
+
+
+    if (checkWinner()) return;
+
+
+    setTimeout(enemyTurn, 800);
+
+}
+
+
+/* =========================
+   HEAVY ATTACK
+========================= */
+
+function heavyAttack() {
+
+    if (gameOver || !playerTurn) return;
+
+
+    playerTurn = false;
+
+    disableMoves();
+
+
+    if (Math.random() < 0.25) {
+
+        battleMessage.textContent = "❌ Your heavy attack MISSED!";
+
+        setTimeout(enemyTurn, 800);
+
+        return;
+
+    }
+
+
+    triggerHitAnimation(playerEmoji);
+
+
+    let damage = random(16, 27);
+
+
+    if (Math.random() < 0.10) {
+
+        damage *= 2;
+
+        battleMessage.textContent = "🔥 MASSIVE CRITICAL HIT! Dealt " + damage + " damage!";
+
+    } else {
+
+        battleMessage.textContent = "💥 Heavy attack landed! " + damage + " damage!";
+
+    }
+
+
+    if (Math.random() < 0.20) {
+
+        damage = Math.floor(damage * 0.4);
+
+        battleMessage.textContent = "🛡️ They blocked most of it!";
+
+    }
+
+
+    enemyHealth -= damage;
+
+    if (enemyHealth < 0) enemyHealth = 0;
+
+
+    updateHealth();
+
+
+    if (checkWinner()) return;
+
+
+    setTimeout(enemyTurn, 800);
+
+}
+
+
+/* =========================
+   HEAL
+========================= */
+
+function heal() {
+
+    if (gameOver || !playerTurn || healUses <= 0) return;
+
+
+    playerTurn = false;
+
+    disableMoves();
+
+
+    const amount = random(8, 15);
+
+    playerHealth += amount;
+
+
+    if (playerHealth > 100) playerHealth = 100;
+
+
+    healUses--;
+
+
+    battleMessage.textContent = "💖 You healed " + amount + " HP!";
+
+
+    updateHealth();
+
+
+    setTimeout(enemyTurn, 800);
+
+}
+
+
+/* =========================
+   BLOCK
+========================= */
+
+function block() {
+
+    if (gameOver || !playerTurn) return;
+
+
+    playerTurn = false;
+
+    disableMoves();
+
+
+    blocking = true;
+
+    blockStatus.textContent = "ACTIVE 🛡️";
+
+    battleMessage.textContent = "🛡️ You raised your guard!";
+
+
+    setTimeout(enemyTurn, 800);
+
+}
+
+
+/* =========================
+   ENEMY TURN
+========================= */
+
+function enemyTurn() {
+
+    if (gameOver) return;
+
+
+    triggerHitAnimation(enemyEmoji);
+
+
+    let damage;
+
+
+    if (enemyHealth <= 45) {
+
+        damage = random(16, 25);
+
+    } else {
+
+        damage = random(12, 21);
+
+    }
+
+
+    if (Math.random() < 0.15) {
+
+        damage += random(5, 10);
+
+        battleMessage.textContent = "🚨 Opponent used a POWERFUL attack!";
+
+    }
+
+
+    if (blocking) {
+
+        damage = Math.floor(damage * 0.35);
+
+        blocking = false;
+
+        blockStatus.textContent = "Not active";
+
+        battleMessage.textContent = "🛡️ Your block protected you! Took only " + damage + " damage.";
+
+    } else {
+
+        battleMessage.textContent = "💥 Opponent attacked for " + damage + " damage!";
+
+    }
+
+
+    playerHealth -= damage;
+
+    if (playerHealth < 0) playerHealth = 0;
+
+
+    updateHealth();
+
+
+    if (checkWinner()) return;
+
+
+    playerTurn = true;
+
+    enableMoves();
+
+}
+
+
+/* =========================
+   CHECK WINNER
+========================= */
+
+function checkWinner() {
+
+    if (enemyHealth <= 0) {
+
+        endGame(true);
+
+        return true;
+
+    }
+
+
+    if (playerHealth <= 0) {
+
+        endGame(false);
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame(playerWon) {
+
+    gameOver = true;
+
+    disableMoves();
+
+
+    document.getElementById("result").style.display = "block";
+
+
+    if (playerWon) {
+
+        document.getElementById("resultEmoji").textContent = "🏆🐼💕";
+
+        document.getElementById("resultTitle").textContent = "YOU WON!";
+
+        document.getElementById("resultMessage").textContent = 
+
+            "You actually did it! You fought your way to victory and proved you're stronger than you look. Happy Anniversary, my love! ❤️";
+
+    } else {
+
+        document.getElementById("resultEmoji").textContent = "😭🐻💔";
+
+        document.getElementById("resultTitle").textContent = "YOU LOST!";
+
+        document.getElementById("resultMessage").textContent = 
+
+            "Awww... you lost this one. Maybe you should have blocked instead of attacking so much! But don't worry, I still love you even when you lose. 😌💕❤️";
+
+    }
+
+
+    document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+function restartGame() {
+
+    playerHealth = 100;
+
+    enemyHealth = 120;
+
+    healUses = 3;
+
+    blocking = false;
+
+    gameOver = false;
+
+    playerTurn = true;
+
+
+    document.getElementById("result").style.display = "none";
+
+    blockStatus.textContent = "Not active";
+
+    battleMessage.textContent = "Choose your move! ⚔️";
+
+
+    updateHealth();
+
+    enableMoves();
+
+}
+
+
+updateHealth();
+
+</script>
+
 </body>
+
 </html>
