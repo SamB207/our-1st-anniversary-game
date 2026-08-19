@@ -1,1460 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
-
-<title>Love Maze 💕</title>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-    background:
-        radial-gradient(circle at center, #ffe4c4, #f5deb3, #bc8f8f)
-        );
-
-    color: #4a4540;
-
-    display: flex;
-    justify-content: center;
-}
-
-.game {
-    width: 100%;
-    max-width: 520px;
-
-    padding:
-        18px 14px
-        35px;
-
-    text-align: center;
-}
-
-
-/* =========================
-   BACK TO MENU
-========================= */
-
-.menu-button {
-    display: inline-block;
-
-    margin-bottom: 8px;
-
-    padding: 9px 17px;
-
-    background: #8b6c5c;
-
-    color: #293845;
-
-    text-decoration: none;
-
-    border-radius: 20px;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 4px 12px
-        rgba(100,50,90,0.12);
-}
-
-.menu-button:active {
-    transform: scale(0.95);
-}
-
-
-/* =========================
-   TITLE
-========================= */
-
-h1 {
-    color: #b94f7b;
-
-    font-size: 30px;
-
-    margin: 7px 0 4px;
-}
-
-.subtitle {
-    font-size: 14px;
-
-    line-height: 1.5;
-
-    margin-bottom: 14px;
-}
-
-
-/* =========================
-   STATS
-========================= */
-
-.stats {
-    display: flex;
-
-    justify-content:
-        space-around;
-
-    background: white;
-
-    border-radius: 18px;
-
-    padding: 11px;
-
-    margin-bottom: 14px;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 4px 12px
-        rgba(100,50,90,0.08);
-}
-
-.warning {
-    color: #c94d68;
-}
-
-
-/* =========================
-   MAZE
-========================= */
-
-#maze {
-    width: min(94vw, 455px);
-
-    height: min(94vw, 455px);
-
-    margin: auto;
-
-    display: grid;
-
-    background: #fff;
-
-    border:
-        4px solid #342214;
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    touch-action: none;
-
-    box-shadow:
-        0 9px 25px
-        rgba(100,50,90,0.18);
-}
-
-
-/* =========================
-   CELLS
-========================= */
-
-.cell {
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #fff9fc;
-}
-
-.wall {
-    background:
-        #c98cab !important;
-}
-
-
-/* =========================
-   PLAYER
-========================= */
-
-.player {
-    width: 72%;
-    height: 72%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #f58db2;
-
-    font-size:
-        clamp(14px, 5vw, 27px);
-
-    z-index: 3;
-
-    box-shadow:
-        0 3px 7px
-        rgba(100,50,90,0.25);
-
-    transition:
-        transform 0.1s ease;
-}
-
-
-/* =========================
-   GOAL
-========================= */
-
-.goal {
-    font-size:
-        clamp(17px, 6vw, 30px);
-
-    animation:
-        pulse 1.2s infinite;
-}
-
-@keyframes pulse {
-
-    0%, 100% {
-        transform: scale(1);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Cupid's Labyrinth - Anniversary Edition</title>
+  <style>
+    :root {
+      --primary-color: #ffdde1;
+      --secondary-color: #ee9ca7;
+      --accent-color: #ff6b6b;
+      --text-color: #a61e4d;
+      --wall-color: #d6336c;
+      --path-color: #fff0f3;
+      --highlight-color: #ff85a1;
+      --btn-color: #ee9ca7;
+      --btn-hover: #d6336c;
     }
 
-    50% {
-        transform: scale(1.15);
+    * {
+      box-sizing: border-box;
+      touch-action: none; /* Prevents scrolling while playing */
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-}
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden; /* Important for full-screen game */
+    }
 
+    header {
+      padding: 15px 20px 5px;
+      text-align: center;
+    }
 
-/* =========================
-   MESSAGE
-========================= */
+    /* Back to Menu Button Styling */
+    .menu-button {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 9px 17px;
+      background: #8b6c5c;
+      color: #ffffff; /* Changed to white for better readability on brown */
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(100,50,90,0.12);
+      transition: transform 0.1s ease;
+    }
 
-#message {
-    min-height: 42px;
+    .menu-button:active {
+      transform: scale(0.95);
+    }
 
-    margin: 13px 5px;
+    h1 {
+      margin: 0;
+      color: var(--text-color);
+      font-size: 1.8rem;
+    }
 
-    font-size: 14px;
+    p.subtitle {
+      margin: 5px 0 0;
+      color: var(--text-color);
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
 
-    font-weight: bold;
+    #game-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+    }
 
-    line-height: 1.5;
-}
+    #maze-grid {
+      display: grid;
+      border: 6px solid var(--wall-color);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      background-color: var(--path-color);
+      border-radius: 8px;
+    }
 
+    .cell {
+      width: 15px; /* Adjust for larger/smaller maze */
+      height: 15px;
+      background-color: var(--path-color);
+    }
 
-/* =========================
-   CONTROLS
-========================= */
+    .wall {
+      background-color: var(--wall-color);
+    }
 
-.controls {
-    width: 190px;
+    .start {
+      background-color: #8ce99a; /* Light green for start */
+    }
 
-    margin:
-        8px auto;
+    .end {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d6336c"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      background-size: cover;
+    }
 
-    display: grid;
+    #player {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background-color: var(--highlight-color);
+      border-radius: 50%;
+      border: 2px solid white;
+      transition: all 0.05s linear;
+      z-index: 10;
+    }
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    #game-ui {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+    }
 
-    gap: 7px;
-}
+    #controls {
+      display: grid;
+      grid-template-columns: 50px 50px 50px;
+      gap: 10px;
+      justify-items: center;
+    }
 
-.control {
-    width: 58px;
-    height: 50px;
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 2px solid var(--text-color);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
 
-    border: none;
+    .control-btn:active {
+      background-color: var(--highlight-color);
+    }
 
-    border-radius: 16px;
+    #up-btn { grid-column: 2; }
+    #down-btn { grid-column: 2; grid-row: 3; }
+    #left-btn { grid-column: 1; grid-row: 2; }
+    #right-btn { grid-column: 3; grid-row: 2; }
 
-    background: white;
+    #reset-btn {
+      padding: 10px 20px;
+      background-color: var(--wall-color);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
 
-    color: #b94f7b;
+    #win-screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      color: var(--text-color);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
 
-    font-size: 21px;
+    #win-screen.visible {
+      display: flex;
+    }
 
-    font-weight: bold;
+    #heart-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
 
-    box-shadow:
-        0 4px 10px
-        rgba(100,50,90,0.12);
-}
-
-.control:active {
-    transform: scale(0.91);
-}
-
-.up {
-    grid-column: 2;
-}
-
-.left {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.down {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.right {
-    grid-column: 3;
-    grid-row: 2;
-}
-
-
-/* =========================
-   BUTTONS
-========================= */
-
-.new-maze {
-    margin-top: 13px;
-
-    padding: 12px 21px;
-
-    border: none;
-
-    border-radius: 22px;
-
-    background: #bd5d85;
-
-    color: white;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 5px 12px
-        rgba(100,50,90,0.15);
-}
-
-.new-maze:active {
-    transform: scale(0.95);
-}
-
-
-/* =========================
-   RESULT
-========================= */
-
-#result {
-    display: none;
-
-    background: white;
-
-    border-radius: 25px;
-
-    padding: 25px 18px;
-
-    margin-top: 18px;
-
-    box-shadow:
-        0 10px 30px
-        rgba(100,50,90,0.15);
-}
-
-.resultEmoji {
-    font-size: 58px;
-}
-
-.resultTitle {
-    color: #b94f7b;
-
-    font-size: 27px;
-}
-
-.resultMessage {
-    font-size: 15px;
-
-    line-height: 1.7;
-}
-
-.play-again {
-    padding: 13px 22px;
-
-    border: none;
-
-    border-radius: 22px;
-
-    background: #bd5d85;
-
-    color: white;
-
-    font-size: 15px;
-
-    font-weight: bold;
-}
-
-.play-again:active {
-    transform: scale(0.95);
-}
-
-</style>
-
+    #play-again-btn {
+      padding: 12px 24px;
+      background-color: var(--wall-color);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+  </style>
 </head>
-
-
 <body>
+  <header>
+    <a href="index.html" class="menu-button">← Back to Menu</a>
+    <h1>Cupid's Labyrinth</h1>
+    <p class="subtitle">Navigate to the heart before it's too late!</p>
+  </header>
 
-
-<div class="game">
-
-
-<a
-    href="index.html"
-    class="menu-button">
-
-    🏠 Back to Menu
-
-</a>
-
-
-<h1>
-    🧩 Love Maze 💕
-</h1>
-
-
-<div class="subtitle">
-
-    Find your way to my heart
-    before time runs out. 😈❤️
-
-    <br>
-
-    <small>
-        Every game creates a new maze.
-    </small>
-
-</div>
-
-
-<div class="stats">
-
-    <div>
-
-        ⏱️ Time:
-        <span id="timer">
-            90
-        </span>s
-
+  <div id="game-container">
+    <div id="maze-grid">
+      <div id="player"></div>
     </div>
 
-
-    <div>
-
-        👣 Moves:
-        <span id="moves">
-            0
-        </span>
-
+    <div id="win-screen">
+      <div id="heart-icon">💖</div>
+      <h2>You found your way to my heart!</h2>
+      <button id="play-again-btn">Play Again 💕</button>
     </div>
+  </div>
 
-</div>
-
-
-<div id="maze"></div>
-
-
-<div id="message">
-
-    Swipe or use the arrows
-    to find the ❤️!
-
-</div>
-
-
-<div class="controls">
-
-
-    <button
-        class="control up"
-        onclick="move(0,-1)">
-
-        ⬆️
-
-    </button>
-
-
-    <button
-        class="control left"
-        onclick="move(-1,0)">
-
-        ⬅️
-
-    </button>
-
-
-    <button
-        class="control down"
-        onclick="move(0,1)">
-
-        ⬇️
-
-    </button>
-
-
-    <button
-        class="control right"
-        onclick="move(1,0)">
-
-        ➡️
-
-    </button>
-
-
-</div>
-
-
-<button
-    class="new-maze"
-    onclick="newMaze()">
-
-    🔄 New Maze
-
-</button>
-
-
-<div id="result">
-
-    <div
-        class="resultEmoji"
-        id="resultEmoji">
+  <div id="game-ui">
+    <div id="controls">
+      <button id="up-btn" class="control-btn">▲</button>
+      <button id="left-btn" class="control-btn">◀</button>
+      <button id="down-btn" class="control-btn">▼</button>
+      <button id="right-btn" class="control-btn">▶</button>
     </div>
+    <button id="reset-btn">Reset Labyrinth</button>
+  </div>
 
+  <script>
+    const MAZE_WIDTH = 31; // Must be odd
+    const MAZE_HEIGHT = 21; // Must be odd
+    const CELL_SIZE = 15; // Must match CSS
 
-    <h2
-        class="resultTitle"
-        id="resultTitle">
-    </h2>
+    const grid = [];
+    const playerPosition = { x: 1, y: 1 };
+    let playerElement;
 
+    // Build the initial grid
+    function setupGrid() {
+      const mazeGrid = document.getElementById('maze-grid');
+      mazeGrid.style.gridTemplateColumns = `repeat(${MAZE_WIDTH}, ${CELL_SIZE}px)`;
+      mazeGrid.style.gridTemplateRows = `repeat(${MAZE_HEIGHT}, ${CELL_SIZE}px)`;
 
-    <p
-        class="resultMessage"
-        id="resultMessage">
-    </p>
+      playerElement = document.getElementById('player');
+      updatePlayerPosition();
 
-
-    <button
-        class="play-again"
-        onclick="newMaze()">
-
-        🧩 Try Another Maze
-
-    </button>
-
-</div>
-
-
-</div>
-
-
-<script>
-
-
-/* =========================
-   GAME SETTINGS
-========================= */
-
-
-/*
-   15 x 15 makes the maze
-   noticeably harder.
-
-   Because the maze uses
-   odd dimensions, the
-   generator can create
-   proper corridors.
-*/
-
-const SIZE = 15;
-
-
-/*
-   90 seconds gives an adult
-   enough time to think but
-   prevents taking forever.
-*/
-
-const TIME_LIMIT = 90;
-
-
-let maze = [];
-
-let player = {
-    x: 1,
-    y: 1
-};
-
-let goal = {
-    x: SIZE - 2,
-    y: SIZE - 2
-};
-
-let moves = 0;
-
-let timeLeft = TIME_LIMIT;
-
-let timer;
-
-let gameOver = false;
-
-
-/* =========================
-   RANDOM NUMBER
-========================= */
-
-function random(min, max) {
-
-    return Math.floor(
-        Math.random() *
-        (max - min + 1)
-    ) + min;
-
-}
-
-
-/* =========================
-   SHUFFLE
-========================= */
-
-function shuffle(array) {
-
-    for (
-        let i = array.length - 1;
-        i > 0;
-        i--
-    ) {
-
-        const j =
-            Math.floor(
-                Math.random() *
-                (i + 1)
-            );
-
-        [
-            array[i],
-            array[j]
-        ] =
-        [
-            array[j],
-            array[i]
-        ];
-
-    }
-
-    return array;
-
-}
-
-
-/* =========================
-   CREATE EMPTY MAZE
-========================= */
-
-function createEmptyMaze() {
-
-    maze = [];
-
-    for (
-        let y = 0;
-        y < SIZE;
-        y++
-    ) {
-
-        maze[y] = [];
-
-        for (
-            let x = 0;
-            x < SIZE;
-            x++
-        ) {
-
-            maze[y][x] = 1;
-
+      for (let y = 0; y < MAZE_HEIGHT; y++) {
+        grid[y] = [];
+        for (let x = 0; x < MAZE_WIDTH; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell wall';
+          if (x === 0 || x === MAZE_WIDTH - 1 || y === 0 || y === MAZE_HEIGHT - 1) {
+            cell.classList.add('boundary');
+          }
+          mazeGrid.appendChild(cell);
+          grid[y][x] = { element: cell, isWall: true };
         }
-
+      }
     }
 
-}
+    // Recursive backtracking maze generation
+    function generateMaze() {
+      const directions = [
+        [0, -2], // Up
+        [0, 2],  // Down
+        [-2, 0], // Left
+        [2, 0]   // Right
+      ];
 
+      function carve(x, y) {
+        grid[y][x].isWall = false;
+        grid[y][x].element.classList.remove('wall');
 
-/* =========================
-   GENERATE MAZE
-========================= */
+        const shuffledDirections = directions.sort(() => Math.random() - 0.5);
 
-function generateMaze() {
+        for (const [dx, dy] of shuffledDirections) {
+          const nextX = x + dx;
+          const nextY = y + dy;
 
-    createEmptyMaze();
-
-
-    /*
-       Recursive backtracking.
-
-       This creates a maze where
-       the player always has a
-       legitimate path to the end.
-    */
-
-    function carve(x, y) {
-
-        maze[y][x] = 0;
-
-
-        let directions = [
-
-            [2, 0],
-
-            [-2, 0],
-
-            [0, 2],
-
-            [0, -2]
-
-        ];
-
-
-        shuffle(directions);
-
-
-        for (
-            const [dx, dy]
-            of directions
-        ) {
-
-            const nx = x + dx;
-
-            const ny = y + dy;
-
-
-            if (
-                nx > 0 &&
-                nx < SIZE - 1 &&
-                ny > 0 &&
-                ny < SIZE - 1 &&
-                maze[ny][nx] === 1
-            ) {
-
-                maze[
-                    y + dy / 2
-                ][
-                    x + dx / 2
-                ] = 0;
-
-
-                carve(nx, ny);
-
-            }
-
+          if (nextX > 0 && nextX < MAZE_WIDTH - 1 && nextY > 0 && nextY < MAZE_HEIGHT - 1 && grid[nextY][nextX].isWall) {
+            const wallX = x + dx / 2;
+            const wallY = y + dy / 2;
+            grid[wallY][wallX].isWall = false;
+            grid[wallY][wallX].element.classList.remove('wall');
+            carve(nextX, nextY);
+          }
         }
+      }
 
+      carve(1, 1);
+
+      // Add Start and End points
+      grid[1][1].element.classList.add('start');
+      const endPoint = { x: MAZE_WIDTH - 2, y: MAZE_HEIGHT - 2 };
+      grid[endPoint.y][endPoint.x].element.classList.add('end');
+      grid[endPoint.y][endPoint.x].isWall = false;
     }
 
-
-    carve(1, 1);
-
-
-    player = {
-        x: 1,
-        y: 1
-    };
-
-
-    goal = {
-        x: SIZE - 2,
-        y: SIZE - 2
-    };
-
-
-    maze[
-        goal.y
-    ][
-        goal.x
-    ] = 0;
-
-
-    /*
-       Add a few extra openings.
-
-       This creates alternate routes
-       and prevents every maze from
-       feeling exactly the same.
-    */
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const x =
-            random(1, SIZE - 2);
-
-        const y =
-            random(1, SIZE - 2);
-
-
-        if (
-            x % 2 === 1 ||
-            y % 2 === 1
-        ) {
-
-            maze[y][x] = 0;
-
-        }
-
+    function resetGame() {
+      const mazeGrid = document.getElementById('maze-grid');
+      mazeGrid.innerHTML = '<div id="player"></div>';
+      playerPosition.x = 1;
+      playerPosition.y = 1;
+      setupGrid();
+      generateMaze();
+      const winScreen = document.getElementById('win-screen');
+      winScreen.classList.remove('visible');
     }
 
-}
-
-
-/* =========================
-   DRAW MAZE
-========================= */
-
-function drawMaze() {
-
-    const mazeElement =
-        document.getElementById(
-            "maze"
-        );
-
-
-    mazeElement.innerHTML = "";
-
-
-    mazeElement.style.gridTemplateColumns =
-        `repeat(${SIZE}, 1fr)`;
-
-
-    mazeElement.style.gridTemplateRows =
-        `repeat(${SIZE}, 1fr)`;
-
-
-    for (
-        let y = 0;
-        y < SIZE;
-        y++
-    ) {
-
-        for (
-            let x = 0;
-            x < SIZE;
-            x++
-        ) {
-
-            const cell =
-                document.createElement(
-                    "div"
-                );
-
-
-            cell.className =
-                "cell";
-
-
-            /*
-               Wall
-            */
-
-            if (
-                maze[y][x] === 1
-            ) {
-
-                cell.classList.add(
-                    "wall"
-                );
-
-            }
-
-
-            /*
-               Player
-            */
-
-            if (
-                x === player.x &&
-                y === player.y
-            ) {
-
-                const playerElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                playerElement.className =
-                    "player";
-
-                playerElement.textContent =
-                    "💗";
-
-                cell.appendChild(
-                    playerElement
-                );
-
-            }
-
-
-            /*
-               Goal
-            */
-
-            if (
-                x === goal.x &&
-                y === goal.y
-            ) {
-
-                const goalElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                goalElement.className =
-                    "goal";
-
-                goalElement.textContent =
-                    "❤️";
-
-                cell.appendChild(
-                    goalElement
-                );
-
-            }
-
-
-            mazeElement.appendChild(
-                cell
-            );
-
-        }
-
+    function updatePlayerPosition() {
+      playerElement.style.left = `${playerPosition.x * CELL_SIZE}px`;
+      playerElement.style.top = `${playerPosition.y * CELL_SIZE}px`;
     }
 
-}
-
-
-/* =========================
-   MOVE PLAYER
-========================= */
-
-function move(dx, dy) {
-
-    if (gameOver) return;
-
-
-    const newX =
-        player.x + dx;
-
-    const newY =
-        player.y + dy;
-
-
-    /*
-       Don't allow moving
-       outside the maze.
-    */
-
-    if (
-        newX < 0 ||
-        newX >= SIZE ||
-        newY < 0 ||
-        newY >= SIZE
-    ) {
-
-        return;
-
+    function checkWin() {
+      if (playerPosition.x === MAZE_WIDTH - 2 && playerPosition.y === MAZE_HEIGHT - 2) {
+        const winScreen = document.getElementById('win-screen');
+        winScreen.classList.add('visible');
+      }
     }
 
-
-    /*
-       Wall collision.
-    */
-
-    if (
-        maze[newY][newX] === 1
-    ) {
-
-        document.getElementById(
-            "message"
-        ).textContent =
-            "💥 Dead end! Try another path.";
-
-        return;
-
-    }
-
-
-    /*
-       Move.
-    */
-
-    player.x = newX;
-
-    player.y = newY;
-
-    moves++;
-
-
-    document.getElementById(
-        "moves"
-    ).textContent =
-        moves;
-
-
-    drawMaze();
-
-
-    /*
-       Check if player reached
-       the heart.
-    */
-
-    if (
-        player.x === goal.x &&
-        player.y === goal.y
-    ) {
-
-        winGame();
-
-    }
-
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-function startTimer() {
-
-    clearInterval(timer);
-
-
-    timer = setInterval(
-        function() {
-
-            if (gameOver) return;
-
-
-            timeLeft--;
-
-
-            document.getElementById(
-                "timer"
-            ).textContent =
-                timeLeft;
-
-
-            /*
-               Make timer red
-               during final 15 seconds.
-            */
-
-            if (
-                timeLeft <= 15
-            ) {
-
-                document.getElementById(
-                    "timer"
-                ).classList.add(
-                    "warning"
-                );
-
-            }
-
-
-            if (
-                timeLeft <= 0
-            ) {
-
-                loseGame();
-
-            }
-
-        },
-        1000
-    );
-
-}
-
-
-/* =========================
-   WIN GAME
-========================= */
-
-function winGame() {
-
-    if (gameOver) return;
-
-
-    gameOver = true;
-
-    clearInterval(timer);
-
-
-    document.getElementById(
-        "result"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "resultEmoji"
-    ).textContent =
-        "🥹💕";
-
-
-    document.getElementById(
-        "resultTitle"
-    ).textContent =
-        "YOU FOUND MY HEART!";
-
-
-    let performance;
-
-
-    if (
-        timeLeft >= 60
-    ) {
-
-        performance =
-            "Okayyy, speed demon! 😳🔥";
-
-    }
-
-    else if (
-        timeLeft >= 30
-    ) {
-
-        performance =
-            "That was pretty good! 😌💕";
-
-    }
-
-    else {
-
-        performance =
-            "You really had me worried there! 😂";
-
-    }
-
-
-    document.getElementById(
-        "resultMessage"
-    ).textContent =
-
-        performance +
-
-        " You made it through the maze "
-        +
-        "in "
-        +
-        moves
-        +
-        " moves with "
-        +
-        timeLeft
-        +
-        " seconds left. ❤️ "
-
-        +
-
-        "Maybe finding my heart "
-        +
-        "was worth the challenge. 🥹💗 "
-
-        +
-
-        "Happy Anniversary, my love!";
-
-
-
-    document.getElementById(
-        "result"
-    ).scrollIntoView({
-        behavior: "smooth"
+    // Keyboard Controls
+    document.addEventListener('keydown', (e) => {
+      let moved = false;
+      switch (e.key) {
+        case 'ArrowUp':
+          if (!grid[playerPosition.y - 1][playerPosition.x].isWall) { playerPosition.y--; moved = true; }
+          break;
+        case 'ArrowDown':
+          if (!grid[playerPosition.y + 1][playerPosition.x].isWall) { playerPosition.y++; moved = true; }
+          break;
+        case 'ArrowLeft':
+          if (!grid[playerPosition.y][playerPosition.x - 1].isWall) { playerPosition.x--; moved = true; }
+          break;
+        case 'ArrowRight':
+          if (!grid[playerPosition.y][playerPosition.x + 1].isWall) { playerPosition.x++; moved = true; }
+          break;
+      }
+      if (moved) {
+        updatePlayerPosition();
+        checkWin();
+        e.preventDefault();
+      }
     });
 
-}
-
-
-/* =========================
-   LOSE GAME
-========================= */
-
-function loseGame() {
-
-    if (gameOver) return;
-
-
-    gameOver = true;
-
-    clearInterval(timer);
-
-
-    document.getElementById(
-        "result"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "resultEmoji"
-    ).textContent =
-        "😭💔";
-
-
-    document.getElementById(
-        "resultTitle"
-    ).textContent =
-        "TIME'S UP!";
-
-
-    document.getElementById(
-        "resultMessage"
-    ).textContent =
-
-        "The maze won this round. 😂💗 "
-
-        +
-
-        "You made "
-        +
-        moves
-        +
-        " moves, but couldn't reach "
-        +
-        "my heart before time ran out. "
-
-        +
-
-        "Maybe try a different path next time. 😈❤️";
-
-
-
-    document.getElementById(
-        "result"
-    ).scrollIntoView({
-        behavior: "smooth"
-    });
-
-}
-
-
-/* =========================
-   NEW MAZE
-========================= */
-
-function newMaze() {
-
-    clearInterval(timer);
-
-
-    moves = 0;
-
-    timeLeft = TIME_LIMIT;
-
-    gameOver = false;
-
-
-    document.getElementById(
-        "moves"
-    ).textContent =
-        "0";
-
-
-    document.getElementById(
-        "timer"
-    ).textContent =
-        TIME_LIMIT;
-
-
-    document.getElementById(
-        "timer"
-    ).classList.remove(
-        "warning"
-    );
-
-
-    document.getElementById(
-        "message"
-    ).textContent =
-        "Swipe or use the arrows to find the ❤️!";
-
-
-    document.getElementById(
-        "result"
-    ).style.display =
-        "none";
-
-
-    generateMaze();
-
-    drawMaze();
-
-    startTimer();
-
-}
-
-
-/* =========================
-   SWIPE CONTROLS
-========================= */
-
-let startX = 0;
-
-let startY = 0;
-
-
-const mazeElement =
-    document.getElementById(
-        "maze"
-    );
-
-
-mazeElement.addEventListener(
-    "touchstart",
-    function(event) {
-
-        const touch =
-            event.touches[0];
-
-
-        startX =
-            touch.clientX;
-
-        startY =
-            touch.clientY;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-mazeElement.addEventListener(
-    "touchend",
-    function(event) {
-
-        const touch =
-            event.changedTouches[0];
-
-
-        const endX =
-            touch.clientX;
-
-        const endY =
-            touch.clientY;
-
-
-        const dx =
-            endX - startX;
-
-        const dy =
-            endY - startY;
-
-
-        const threshold = 25;
-
-
-        /*
-           Ignore tiny touches.
-        */
-
-        if (
-            Math.abs(dx) <
-            threshold &&
-            Math.abs(dy) <
-            threshold
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-           Horizontal swipe.
-        */
-
-        if (
-            Math.abs(dx) >
-            Math.abs(dy)
-        ) {
-
-            if (dx > 0) {
-
-                move(1, 0);
-
-            }
-
-            else {
-
-                move(-1, 0);
-
-            }
-
-        }
-
-
-        /*
-           Vertical swipe.
-        */
-
-        else {
-
-            if (dy > 0) {
-
-                move(0, 1);
-
-            }
-
-            else {
-
-                move(0, -1);
-
-            }
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================
-   START
-========================= */
-
-newMaze();
-
-</script>
-
+    // Button Controls
+    document.getElementById('up-btn').addEventListener('click', () => { if (!grid[playerPosition.y - 1][playerPosition.x].isWall) { playerPosition.y--; updatePlayerPosition(); checkWin(); } });
+    document.getElementById('down-btn').addEventListener('click', () => { if (!grid[playerPosition.y + 1][playerPosition.x].isWall) { playerPosition.y++; updatePlayerPosition(); checkWin(); } });
+    document.getElementById('left-btn').addEventListener('click', () => { if (!grid[playerPosition.y][playerPosition.x - 1].isWall) { playerPosition.x--; updatePlayerPosition(); checkWin(); } });
+    document.getElementById('right-btn').addEventListener('click', () => { if (!grid[playerPosition.y][playerPosition.x + 1].isWall) { playerPosition.x++; updatePlayerPosition(); checkWin(); } });
+
+    document.getElementById('reset-btn').addEventListener('click', resetGame);
+    document.getElementById('play-again-btn').addEventListener('click', resetGame);
+
+    resetGame();
+  </script>
 </body>
-
 </html>
