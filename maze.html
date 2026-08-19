@@ -1,44 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Cupid's Labyrinth - Anniversary Edition</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Love Quiz ❤️</title>
   <style>
-    :root {
-      --primary-color: #ffdde1;
-      --secondary-color: #ee9ca7;
-      --accent-color: #ff6b6b;
-      --text-color: #a61e4d;
-      --wall-color: #d6336c;
-      --path-color: #fff0f3;
-      --highlight-color: #ff85a1;
-      --btn-color: #ee9ca7;
-      --btn-hover: #d6336c;
-    }
-
-    * {
-      box-sizing: border-box;
-      touch-action: none; /* Prevents scrolling while playing */
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
     body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5ebe6;
+      color: #4a3b32;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      overflow: hidden; /* Important for full-screen game */
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    header {
-      padding: 15px 20px 5px;
+    .quiz-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
       text-align: center;
     }
 
@@ -55,315 +41,244 @@
       font-weight: bold;
       box-shadow: 0 4px 12px rgba(100,50,90,0.12);
       transition: transform 0.1s ease;
+      cursor: pointer;
+      border: none;
     }
 
     .menu-button:active {
       transform: scale(0.95);
     }
 
-    h1 {
-      margin: 0;
-      color: var(--text-color);
-      font-size: 1.8rem;
+    .progress {
+      font-size: 14px;
+      color: #8b6c5c;
+      margin-bottom: 12px;
+      font-weight: bold;
     }
 
-    p.subtitle {
-      margin: 5px 0 0;
-      color: var(--text-color);
-      font-size: 0.95rem;
-      opacity: 0.85;
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #3a2e2b;
     }
 
-    #game-container {
-      flex: 1;
+    .options-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      position: relative;
-    }
-
-    #maze-grid {
-      display: grid;
-      border: 6px solid var(--wall-color);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      background-color: var(--path-color);
-      border-radius: 8px;
-    }
-
-    .cell {
-      width: 15px; /* Adjust for larger/smaller maze */
-      height: 15px;
-      background-color: var(--path-color);
-    }
-
-    .wall {
-      background-color: var(--wall-color);
-    }
-
-    .start {
-      background-color: #8ce99a; /* Light green for start */
-    }
-
-    .end {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d6336c"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
-      background-size: cover;
-    }
-
-    #player {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background-color: var(--highlight-color);
-      border-radius: 50%;
-      border: 2px solid white;
-      transition: all 0.05s linear;
-      z-index: 10;
-    }
-
-    #game-ui {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      padding: 15px;
-    }
-
-    #controls {
-      display: grid;
-      grid-template-columns: 50px 50px 50px;
       gap: 10px;
-      justify-items: center;
+      margin-bottom: 20px;
     }
 
-    .control-btn {
-      width: 50px;
-      height: 50px;
-      background-color: rgba(255, 255, 255, 0.5);
-      border: 2px solid var(--text-color);
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2rem;
-      color: var(--text-color);
+    .option-btn {
+      background: #fdf8f5;
+      border: 2px solid #e0d0c8;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      color: #4a3b32;
       cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
     }
 
-    .control-btn:active {
-      background-color: var(--highlight-color);
+    .option-btn:hover {
+      background: #f4e8e1;
+      border-color: #8b6c5c;
     }
 
-    #up-btn { grid-column: 2; }
-    #down-btn { grid-column: 2; grid-row: 3; }
-    #left-btn { grid-column: 1; grid-row: 2; }
-    #right-btn { grid-column: 3; grid-row: 2; }
-
-    #reset-btn {
-      padding: 10px 20px;
-      background-color: var(--wall-color);
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-    }
-
-    #win-screen {
+    .result-container {
       display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.95);
-      color: var(--text-color);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
     }
 
-    #win-screen.visible {
-      display: flex;
-    }
-
-    #heart-icon {
-      font-size: 3rem;
-      margin-bottom: 15px;
-    }
-
-    #play-again-btn {
-      padding: 12px 24px;
-      background-color: var(--wall-color);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 1rem;
+    .result-score {
+      font-size: 22px;
       font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
+      margin-bottom: 12px;
+      color: #8b6c5c;
+    }
+
+    .result-message {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 24px;
     }
   </style>
 </head>
 <body>
-  <header>
+
+  <div class="quiz-card">
     <a href="index.html" class="menu-button">← Back to Menu</a>
-    <h1>Cupid's Labyrinth</h1>
-    <p class="subtitle">Navigate to the heart before it's too late!</p>
-  </header>
 
-  <div id="game-container">
-    <div id="maze-grid">
-      <div id="player"></div>
+    <!-- Quiz Screen -->
+    <div id="quiz-screen">
+      <div class="progress" id="progress">Question 1 of 15</div>
+      <div class="question" id="question">Loading question...</div>
+      <div class="options-container" id="options"></div>
     </div>
 
-    <div id="win-screen">
-      <div id="heart-icon">💖</div>
-      <h2>You found your way to my heart!</h2>
-      <button id="play-again-btn">Play Again 💕</button>
+    <!-- Results Screen -->
+    <div id="result-screen" class="result-container">
+      <h2>Quiz Finished! 💕</h2>
+      <div class="result-score" id="score-text"></div>
+      <div class="result-message" id="message-text"></div>
+      <button class="menu-button" onclick="restartQuiz()">Try Again 🔄</button>
     </div>
-  </div>
-
-  <div id="game-ui">
-    <div id="controls">
-      <button id="up-btn" class="control-btn">▲</button>
-      <button id="left-btn" class="control-btn">◀</button>
-      <button id="down-btn" class="control-btn">▼</button>
-      <button id="right-btn" class="control-btn">▶</button>
-    </div>
-    <button id="reset-btn">Reset Labyrinth</button>
   </div>
 
   <script>
-    const MAZE_WIDTH = 31; // Must be odd
-    const MAZE_HEIGHT = 21; // Must be odd
-    const CELL_SIZE = 15; // Must match CSS
+    const quizData = [
+      // Questions about "Us"
+      {
+        question: "1. Where was our very first official date?",
+        options: ["Coffee Shop", "Italian Restaurant", "The Park", "Movie Theater"],
+        correct: 1
+      },
+      {
+        question: "2. Who initiated our first kiss?",
+        options: ["You did!", "I did!", "We both did at the same time", "Neither (it just happened)"],
+        correct: 1
+      },
+      {
+        question: "3. What is our go-to comfort food to order together?",
+        options: ["Pizza", "Sushi", "Tacos", "Burgers"],
+        correct: 0
+      },
+      {
+        question: "4. Which trip or memory together has been the most special?",
+        options: ["Road trip weekend", "Beach day", "Lazy rainy day inside", "Amusement park day"],
+        correct: 2
+      },
+      {
+        question: "5. What is our official anniversary date?",
+        options: ["January 14", "June 20", "October 5", "August 18"], // Edit as needed!
+        correct: 3
+      },
+      {
+        question: "6. Who usually takes longer to get ready?",
+        options: ["Me, obviously 💅", "You! ⏰", "We are equally slow", "Neither, we are super fast"],
+        correct: 0
+      },
+      {
+        question: "7. What was the first movie or show we binged together?",
+        options: ["Stranger Things", "The Office", "Breaking Bad", "Friends"],
+        correct: 1
+      },
 
-    const grid = [];
-    const playerPosition = { x: 1, y: 1 };
-    let playerElement;
+      // Questions about "Me"
+      {
+        question: "8. What is my absolute favorite drink?",
+        options: ["Iced Coffee", "Matcha Latte", "Boba Tea", "Lemonade"],
+        correct: 0
+      },
+      {
+        question: "9. What is my biggest pet peeve?",
+        options: ["Loud chewing", "Being late", "Slow walkers", "Messy rooms"],
+        correct: 2
+      },
+      {
+        question: "10. What do I order when we get ice cream?",
+        options: ["Chocolate Fudge", "Vanilla Bean", "Mint Chocolate Chip", "Cookie Dough"],
+        correct: 3
+      },
+      {
+        question: "11. What is my dream travel destination?",
+        options: ["Japan", "Italy", "Greece", "Iceland"],
+        correct: 0
+      },
+      {
+        question: "12. What was my favorite subject growing up?",
+        options: ["Art", "English", "History", "Science"],
+        correct: 0
+      },
+      {
+        question: "13. How do I usually take my coffee/tea?",
+        options: ["Black / Plain", "Extra sweet with cream", "Just a splash of milk", "I don't drink caffeinated drinks"],
+        correct: 1
+      },
+      {
+        question: "14. If I could only eat one meal for the rest of my life, what is it?",
+        options: ["Tacos", "Pasta", "Ramen", "Steak"],
+        correct: 1
+      },
+      {
+        question: "15. What is my favorite thing about you?",
+        options: ["Your smile 😊", "Your sense of humor 😂", "How caring you are ❤️", "All of the above! 🥰"],
+        correct: 3
+      }
+    ];
 
-    // Build the initial grid
-    function setupGrid() {
-      const mazeGrid = document.getElementById('maze-grid');
-      mazeGrid.style.gridTemplateColumns = `repeat(${MAZE_WIDTH}, ${CELL_SIZE}px)`;
-      mazeGrid.style.gridTemplateRows = `repeat(${MAZE_HEIGHT}, ${CELL_SIZE}px)`;
+    let currentQuestionIndex = 0;
+    let score = 0;
 
-      playerElement = document.getElementById('player');
-      updatePlayerPosition();
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const progressEl = document.getElementById('progress');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const scoreTextEl = document.getElementById('score-text');
+    const messageTextEl = document.getElementById('message-text');
 
-      for (let y = 0; y < MAZE_HEIGHT; y++) {
-        grid[y] = [];
-        for (let x = 0; x < MAZE_WIDTH; x++) {
-          const cell = document.createElement('div');
-          cell.className = 'cell wall';
-          if (x === 0 || x === MAZE_WIDTH - 1 || y === 0 || y === MAZE_HEIGHT - 1) {
-            cell.classList.add('boundary');
-          }
-          mazeGrid.appendChild(cell);
-          grid[y][x] = { element: cell, isWall: true };
-        }
+    function loadQuestion() {
+      const currentQuiz = quizData[currentQuestionIndex];
+      progressEl.innerText = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+      questionEl.innerText = currentQuiz.question;
+      
+      optionsEl.innerHTML = '';
+      currentQuiz.options.forEach((optionText, index) => {
+        const button = document.createElement('button');
+        button.classList.add('option-btn');
+        button.innerText = optionText;
+        button.onclick = () => selectOption(index);
+        optionsEl.appendChild(button);
+      });
+    }
+
+    function selectOption(selectedIndex) {
+      if (selectedIndex === quizData[currentQuestionIndex].correct) {
+        score++;
+      }
+      
+      currentQuestionIndex++;
+      
+      if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+      } else {
+        showResults();
       }
     }
 
-    // Recursive backtracking maze generation
-    function generateMaze() {
-      const directions = [
-        [0, -2], // Up
-        [0, 2],  // Down
-        [-2, 0], // Left
-        [2, 0]   // Right
-      ];
+    function showResults() {
+      quizScreen.style.display = 'none';
+      resultScreen.style.display = 'block';
 
-      function carve(x, y) {
-        grid[y][x].isWall = false;
-        grid[y][x].element.classList.remove('wall');
+      const percentage = Math.round((score / quizData.length) * 100);
+      scoreTextEl.innerText = `You scored ${score} / ${quizData.length} (${percentage}%)`;
 
-        const shuffledDirections = directions.sort(() => Math.random() - 0.5);
+      let message = "";
 
-        for (const [dx, dy] of shuffledDirections) {
-          const nextX = x + dx;
-          const nextY = y + dy;
-
-          if (nextX > 0 && nextX < MAZE_WIDTH - 1 && nextY > 0 && nextY < MAZE_HEIGHT - 1 && grid[nextY][nextX].isWall) {
-            const wallX = x + dx / 2;
-            const wallY = y + dy / 2;
-            grid[wallY][wallX].isWall = false;
-            grid[wallY][wallX].element.classList.remove('wall');
-            carve(nextX, nextY);
-          }
-        }
+      if (percentage <= 30) {
+        message = "Hmm... 🤨 Are you sure you know who I am?! I think you need a refresher course on us! You owe me a date night to catch up! ❤️";
+      } else if (percentage <= 50) {
+        message = "Not terrible, but definitely room for improvement! 😉 We need to spend more quality time together so you can study up! 📝💕";
+      } else if (percentage <= 80) {
+        message = "Pretty good job, bae! 💖 You definitely pay attention, though a few trick questions got you. I still love you tons! 🥰";
+      } else {
+        message = "WOW! 🏆 Perfect / near-perfect score! You really know me inside and out. You truly are my soulmate and my favorite person ever! ❤️👑";
       }
 
-      carve(1, 1);
-
-      // Add Start and End points
-      grid[1][1].element.classList.add('start');
-      const endPoint = { x: MAZE_WIDTH - 2, y: MAZE_HEIGHT - 2 };
-      grid[endPoint.y][endPoint.x].element.classList.add('end');
-      grid[endPoint.y][endPoint.x].isWall = false;
+      messageTextEl.innerText = message;
     }
 
-    function resetGame() {
-      const mazeGrid = document.getElementById('maze-grid');
-      mazeGrid.innerHTML = '<div id="player"></div>';
-      playerPosition.x = 1;
-      playerPosition.y = 1;
-      setupGrid();
-      generateMaze();
-      const winScreen = document.getElementById('win-screen');
-      winScreen.classList.remove('visible');
+    function restartQuiz() {
+      currentQuestionIndex = 0;
+      score = 0;
+      resultScreen.style.display = 'none';
+      quizScreen.style.display = 'block';
+      loadQuestion();
     }
 
-    function updatePlayerPosition() {
-      playerElement.style.left = `${playerPosition.x * CELL_SIZE}px`;
-      playerElement.style.top = `${playerPosition.y * CELL_SIZE}px`;
-    }
-
-    function checkWin() {
-      if (playerPosition.x === MAZE_WIDTH - 2 && playerPosition.y === MAZE_HEIGHT - 2) {
-        const winScreen = document.getElementById('win-screen');
-        winScreen.classList.add('visible');
-      }
-    }
-
-    // Keyboard Controls
-    document.addEventListener('keydown', (e) => {
-      let moved = false;
-      switch (e.key) {
-        case 'ArrowUp':
-          if (!grid[playerPosition.y - 1][playerPosition.x].isWall) { playerPosition.y--; moved = true; }
-          break;
-        case 'ArrowDown':
-          if (!grid[playerPosition.y + 1][playerPosition.x].isWall) { playerPosition.y++; moved = true; }
-          break;
-        case 'ArrowLeft':
-          if (!grid[playerPosition.y][playerPosition.x - 1].isWall) { playerPosition.x--; moved = true; }
-          break;
-        case 'ArrowRight':
-          if (!grid[playerPosition.y][playerPosition.x + 1].isWall) { playerPosition.x++; moved = true; }
-          break;
-      }
-      if (moved) {
-        updatePlayerPosition();
-        checkWin();
-        e.preventDefault();
-      }
-    });
-
-    // Button Controls
-    document.getElementById('up-btn').addEventListener('click', () => { if (!grid[playerPosition.y - 1][playerPosition.x].isWall) { playerPosition.y--; updatePlayerPosition(); checkWin(); } });
-    document.getElementById('down-btn').addEventListener('click', () => { if (!grid[playerPosition.y + 1][playerPosition.x].isWall) { playerPosition.y++; updatePlayerPosition(); checkWin(); } });
-    document.getElementById('left-btn').addEventListener('click', () => { if (!grid[playerPosition.y][playerPosition.x - 1].isWall) { playerPosition.x--; updatePlayerPosition(); checkWin(); } });
-    document.getElementById('right-btn').addEventListener('click', () => { if (!grid[playerPosition.y][playerPosition.x + 1].isWall) { playerPosition.x++; updatePlayerPosition(); checkWin(); } });
-
-    document.getElementById('reset-btn').addEventListener('click', resetGame);
-    document.getElementById('play-again-btn').addEventListener('click', resetGame);
-
-    resetGame();
+    // Initialize quiz
+    loadQuestion();
   </script>
 </body>
 </html>
