@@ -1,374 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Love Chess - Play vs. Cupid</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkmate, My Bae 👑♟️</title>
+  
+  <!-- Chessboard.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
+
   <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-touch-callout: none;
-    }
-
     body {
-      margin: 0;
-      padding: 20px 10px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #ffe6ea 0%, #fbd3e9 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #4a3b32; /* Warm brown theme */
+      color: #ffffff;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    h2 {
-      margin: 0 0 5px 0;
-      color: #d6336c;
-      font-size: 1.8rem;
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-      color: #a61e4d;
-      margin-bottom: 12px;
-    }
-
-    #status {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: #a61e4d;
+    .game-card {
+      background: #2b211b;
+      padding: 24px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       text-align: center;
+      position: relative;
     }
 
-    /* Romantic Board Styling */
+    /* Back to Menu Button Styling */
+    .menu-button {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 9px 17px;
+      background: #8b6c5c;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(100,50,90,0.12);
+      transition: transform 0.1s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .menu-button:active {
+      transform: scale(0.95);
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #f5ebe6;
+    }
+
+    .status {
+      font-size: 14px;
+      color: #d1c2b9;
+      margin-bottom: 16px;
+      min-height: 20px;
+      font-weight: 500;
+    }
+
     #board {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
       width: 100%;
       max-width: 400px;
-      aspect-ratio: 1 / 1;
-      border: 4px solid #d6336c;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(214, 51, 108, 0.25);
-      touch-action: manipulation;
+      margin: 0 auto 16px auto;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-    .menu-button {
-    display: inline-block;
 
-    margin-bottom: 8px;
-
-    padding: 9px 17px;
-
-    background: #8b6c5c;
-
-    color: #293845;
-
-    text-decoration: none;
-
-    border-radius: 20px;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 4px 12px
-        rgba(100,50,90,0.12);
-}
-
-.menu-button:active {
-    transform: scale(0.95);
-}
-
-
-    .square {
+    .controls {
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-size: min(10vw, 42px);
-      cursor: pointer;
-      transition: background-color 0.2s ease;
+      gap: 10px;
     }
 
-    /* Soft Pink Board Colors */
-    .light {
-      background-color: #fff0f3;
-    }
-
-    .dark {
-      background-color: #f7aef8;
-    }
-
-    /* Selected & Highlight States */
-    .selected {
-      background-color: #ff85a1 !important;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
+    .btn-action {
+      background: #6a5043;
       color: #fff;
-      background: linear-gradient(45deg, #ff4d6d, #d6336c);
       border: none;
-      border-radius: 25px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(214, 51, 108, 0.3);
-      transition: transform 0.1s ease;
+      transition: background 0.2s;
     }
 
-    button:active {
-      transform: scale(0.96);
+    .btn-action:hover {
+      background: #8b6c5c;
     }
 
-    /* Love Message Modal */
-    .modal {
+    /* Game Over Message Overlay */
+    .modal-overlay {
       display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 100;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 25px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
       border-radius: 20px;
-      text-align: center;
-      max-width: 320px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      border: 3px solid #ff4d6d;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      animation: fadeIn 0.3s ease;
     }
 
-    .modal-content h3 {
-      color: #d6336c;
-      margin-top: 0;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .modal-content p {
-      color: #495057;
-      font-size: 1rem;
-      line-height: 1.4;
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #f5ebe6;
+    }
+
+    .modal-message {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #d1c2b9;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2>💖 Love Chess 💖</h2>
-  <div class="subtitle">You (White) vs. Cupid AI (Black)</div>
-  <div id="status">Your turn, sweetheart! ✨</div>
-  <div id="board"></div>
-  <button onclick="resetGame()">Start New Game 💕</button>
+  <div class="game-card">
+    <a href="index.html" class="menu-button">← Back to Menu</a>
 
-  <!-- Winner / Loser Popup -->
-  <div id="loveModal" class="modal">
-    <div class="modal-content">
-      <h3 id="modalTitle"></h3>
-      <p id="modalMessage"></p>
-      <button onclick="closeModal()">Play Again 💌</button>
+    <h1>Checkmate, My Bae 👑♟️</h1>
+    <div class="status" id="status">Your turn! (You play as White)</div>
+
+    <div id="board"></div>
+
+    <div class="controls">
+      <button class="btn-action" id="resetBtn">Restart Game 🔄</button>
+      <button class="btn-action" id="undoBtn">Undo Move ↩️</button>
+    </div>
+
+    <!-- Win/Loss Message Pop-up -->
+    <div class="modal-overlay" id="resultModal">
+      <div class="modal-title" id="modalTitle">Game Over</div>
+      <div class="modal-message" id="modalMessage">Message text here...</div>
+      <button class="btn-action" onclick="closeModal()">Play Again 🔄</button>
     </div>
   </div>
 
+  <!-- Dependencies -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
   <script>
-    const boardElement = document.getElementById('board');
-    const statusElement = document.getElementById('status');
-    const modal = document.getElementById('loveModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
+    let board = null;
+    const game = new Chess();
+    const statusEl = document.getElementById('status');
+    const modalEl = document.getElementById('resultModal');
+    const modalTitleEl = document.getElementById('modalTitle');
+    const modalMessageEl = document.getElementById('modalMessage');
 
-    const pieces = {
-      'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
-      'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
-    };
-
-    const initialBoard = [
-      ['r','n','b','q','k','b','n','r'],
-      ['p','p','p','p','p','p','p','p'],
-      ['','','','','','','',''],
-      ['','','','','','','',''],
-      ['','','','','','','',''],
-      ['','','','','','','',''],
-      ['P','P','P','P','P','P','P','P'],
-      ['R','N','B','Q','K','B','N','R']
-    ];
-
-    let gameState = [];
-    let selectedSquare = null;
-    let turn = 'white'; // 'white' = Player, 'black' = Cupid AI
-    let gameOver = false;
-
-    function isWhite(piece) { return piece && piece === piece.toUpperCase(); }
-    function isBlack(piece) { return piece && piece === piece.toLowerCase(); }
-
-    function initGame() {
-      gameState = JSON.parse(JSON.stringify(initialBoard));
-      turn = 'white';
-      selectedSquare = null;
-      gameOver = false;
-      statusElement.textContent = "Your turn, sweetheart! ✨";
-      renderBoard();
+    function onDragStart(source, piece, position, orientation) {
+      if (game.game_over()) return false;
+      if (piece.search(/^b/) !== -1) return false; // Player plays as White
     }
 
-    function renderBoard() {
-      boardElement.innerHTML = '';
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const square = document.createElement('div');
-          square.classList.add('square');
-          square.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
-          square.dataset.row = r;
-          square.dataset.col = c;
+    function makeRandomMove() {
+      const possibleMoves = game.moves();
+      if (possibleMoves.length === 0) return;
 
-          const piece = gameState[r][c];
-          if (piece) square.textContent = pieces[piece];
+      const randomIdx = Math.floor(Math.random() * possibleMoves.length);
+      game.move(possibleMoves[randomIdx]);
+      board.position(game.fen());
+      updateStatus();
+    }
 
-          if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
-            square.classList.add('selected');
-          }
+    function onDrop(source, target) {
+      const move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q'
+      });
 
-          square.addEventListener('click', () => handleSquareTap(r, c));
-          boardElement.appendChild(square);
-        }
+      if (move === null) return 'snapback';
+
+      updateStatus();
+
+      if (!game.game_over()) {
+        statusEl.innerText = "Thinking... 🤔";
+        window.setTimeout(makeRandomMove, 300);
       }
     }
 
-    function handleSquareTap(r, c) {
-      if (gameOver || turn !== 'white') return;
-
-      const piece = gameState[r][c];
-
-      if (selectedSquare) {
-        if (selectedSquare.r === r && selectedSquare.c === c) {
-          selectedSquare = null;
-          renderBoard();
-          return;
-        }
-
-        const currentPiece = gameState[selectedSquare.r][selectedSquare.c];
-
-        // Prevent capturing your own pieces
-        if (isWhite(piece)) {
-          selectedSquare = { r, c };
-          renderBoard();
-          return;
-        }
-
-        // Check if captured King
-        if (piece === 'k') {
-          executeMove(selectedSquare.r, selectedSquare.c, r, c);
-          showLoveMessage(true);
-          return;
-        }
-
-        // Make Move
-        executeMove(selectedSquare.r, selectedSquare.c, r, c);
-        selectedSquare = null;
-        turn = 'black';
-        statusElement.textContent = "Cupid is thinking... 💘";
-        renderBoard();
-
-        // Cupid AI Turn
-        setTimeout(cupidAIMove, 600);
-        return;
-      }
-
-      if (piece && isWhite(piece)) {
-        selectedSquare = { r, c };
-        renderBoard();
-      }
+    function onSnapEnd() {
+      board.position(game.fen());
     }
 
-    function executeMove(fromR, fromC, toR, toC) {
-      gameState[toR][toC] = gameState[fromR][fromC];
-      gameState[fromR][fromC] = '';
-    }
+    function updateStatus() {
+      let statusText = '';
 
-    // Cupid AI logic
-    function cupidAIMove() {
-      if (gameOver) return;
-
-      let possibleMoves = [];
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          if (isBlack(gameState[r][c])) {
-            // Find all neighboring or forward spaces for basic AI move
-            const moves = [
-              { r: r + 1, c: c },
-              { r: r + 1, c: c - 1 },
-              { r: r + 1, c: c + 1 },
-              { r: r, c: c - 1 },
-              { r: r, c: c + 1 }
-            ];
-
-            moves.forEach(m => {
-              if (m.r >= 0 && m.r < 8 && m.c >= 0 && m.c < 8) {
-                const target = gameState[m.r][m.c];
-                if (!isBlack(target)) {
-                  possibleMoves.push({
-                    from: { r, c },
-                    to: m,
-                    capturesKing: target === 'K'
-                  });
-                }
-              }
-            });
-          }
+      if (game.in_checkmate()) {
+        if (game.turn() === 'w') {
+          // Player Lost
+          statusText = 'Game Over: Checkmate!';
+          showGameOver(false);
+        } else {
+          // Player Won
+          statusText = 'Game Over: You Won!';
+          showGameOver(true);
         }
-      }
-
-      if (possibleMoves.length > 0) {
-        // Prioritize capturing Player King
-        let kingCapture = possibleMoves.find(m => m.capturesKing);
-        let move = kingCapture || possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-
-        if (move.capturesKing) {
-          executeMove(move.from.r, move.from.c, move.to.r, move.to.c);
-          renderBoard();
-          showLoveMessage(false);
-          return;
-        }
-
-        executeMove(move.from.r, move.from.c, move.to.r, move.to.c);
-      }
-
-      turn = 'white';
-      statusElement.textContent = "Your turn, sweetheart! ✨";
-      renderBoard();
-    }
-
-    function showLoveMessage(didWin) {
-      gameOver = true;
-      if (didWin) {
-        modalTitle.textContent = "🎉 You Won My Heart! 💖";
-        modalMessage.textContent = "You defeated Cupid! Every move you make captured my heart. I love you so much! 💕";
+      } else if (game.in_draw()) {
+        statusText = 'Game Over: Draw / Stalemate 🤝';
+        showDraw();
       } else {
-        modalTitle.textContent = "💘 Cupid Got You!";
-        modalMessage.textContent = "Cupid won this round, but you'll always be my #1 victory! Try again, my love? 🥰";
+        statusText = game.turn() === 'w' ? 'Your turn! (White)' : 'Computer turn... (Black)';
+        if (game.in_check()) {
+          statusText += ' — Check! ⚠️';
+        }
       }
-      modal.style.display = 'flex';
+
+      statusEl.innerText = statusText;
+    }
+
+    function showGameOver(isWin) {
+      if (isWin) {
+        modalTitleEl.innerText = "YOU WIN! 🏆👑";
+        modalMessageEl.innerText = "You totally outsmarted me! You're a true grandmaster and you've conquered my heart! ❤️ Bright side: you owe me a victory kiss! 😘";
+      } else {
+        modalTitleEl.innerText = "CHECKMATE! 🖤♟️";
+        modalMessageEl.innerText = "Aww, good try! You lost this round, but you still win my heart forever. ❤️ Rematch time?";
+      }
+      modalEl.style.display = 'flex';
+    }
+
+    function showDraw() {
+      modalTitleEl.innerText = "STALEMATE! 🤝";
+      modalMessageEl.innerText = "It's a tie! We really are perfectly matched for each other 💕";
+      modalEl.style.display = 'flex';
     }
 
     function closeModal() {
-      modal.style.display = 'none';
-      initGame();
+      modalEl.style.display = 'none';
+      resetGame();
     }
 
     function resetGame() {
-      initGame();
+      game.reset();
+      board.position('start');
+      updateStatus();
     }
 
-    initGame();
+    const config = {
+      draggable: true,
+      position: 'start',
+      onDragStart: onDragStart,
+      onDrop: onDrop,
+      onSnapEnd: onSnapEnd,
+      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+    };
+
+    board = Chessboard('board', config);
+    updateStatus();
+
+    document.getElementById('resetBtn').addEventListener('click', resetGame);
+
+    document.getElementById('undoBtn').addEventListener('click', () => {
+      game.undo(); // Undo computer move
+      game.undo(); // Undo player move
+      board.position(game.fen());
+      updateStatus();
+    });
   </script>
 </body>
 </html>
