@@ -16,7 +16,7 @@ user-scalable=no">
 <!-- Chessboard CSS -->
 <link
     rel="stylesheet"
-    href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"
 >
 
 <style>
@@ -72,9 +72,7 @@ body {
 }
 
 
-/* =========================
-   MENU BUTTON
-========================= */
+/* MENU BUTTON */
 
 .menu-button {
 
@@ -101,16 +99,6 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-.menu-button:active {
-
-    transform: scale(0.95);
-
-}
-
-
-/* =========================
-   TITLE & SIDE SELECT
-========================= */
 
 h1 {
 
@@ -172,15 +160,15 @@ h1 {
 }
 
 
-/* =========================
-   CHESSBOARD CONTAINER
-========================= */
+/* CHESSBOARD CONTAINER */
 
 #board {
 
     width: 100%;
 
     max-width: 400px;
+
+    min-height: 320px;
 
     margin: 0 auto 15px auto;
 
@@ -192,7 +180,7 @@ h1 {
 }
 
 
-/* Styling Sage Green Board Theme */
+/* Sage Green Theme */
 
 .white-1e1d7 {
 
@@ -209,9 +197,7 @@ h1 {
 }
 
 
-/* =========================
-   CONTROLS
-========================= */
+/* CONTROLS */
 
 .controls {
 
@@ -247,16 +233,7 @@ h1 {
 }
 
 
-.btn:active {
-
-    transform: scale(0.95);
-
-}
-
-
-/* =========================
-   RESULT MODAL
-========================= */
+/* RESULT */
 
 #result {
 
@@ -276,31 +253,11 @@ h1 {
 }
 
 
-.resultEmoji {
+.resultEmoji { font-size: 50px; }
 
-    font-size: 50px;
+.resultTitle { color: #e5e7eb; font-size: 24px; margin: 8px 0; }
 
-}
-
-
-.resultTitle {
-
-    color: #e5e7eb;
-
-    font-size: 24px;
-
-    margin: 8px 0;
-}
-
-
-.resultMessage {
-
-    font-size: 15px;
-
-    line-height: 1.6;
-
-    color: #d1d5db;
-}
+.resultMessage { font-size: 15px; line-height: 1.6; color: #d1d5db; }
 
 </style>
 
@@ -313,99 +270,73 @@ h1 {
 <div class="game">
 
 
-<!-- MENU -->
-
-<a href="index.html" class="menu-button">
-
-    🏠 Back to Menu
-
-</a>
+    <a href="index.html" class="menu-button">🏠 Back to Menu</a>
 
 
-<h1>Checkmate, My Bae 👑♟️</h1>
+    <h1>Checkmate, My Bae 👑♟️</h1>
 
 
-<div class="subtitle" id="status">
-
-    Your turn!
-
-</div>
+    <div class="subtitle" id="status">Your turn!</div>
 
 
-<!-- SIDE SELECTION -->
+    <!-- SIDE SELECT -->
 
-<div class="side-select">
+    <div class="side-select">
 
-    <label for="playerColor">Play as:</label>
+        <label for="playerColor">Play as:</label>
 
-    <select id="playerColor" onchange="changePlayerColor()">
+        <select id="playerColor" onchange="changePlayerColor()">
 
-        <option value="w" selected>White (First Move ⚪)</option>
+            <option value="w" selected>White (First Move ⚪)</option>
 
-        <option value="b">Black (Second Move 🖤)</option>
+            <option value="b">Black (Second Move 🖤)</option>
 
-    </select>
+        </select>
 
-</div>
-
-
-<!-- CHESS BOARD CONTAINER (RESTORED) -->
-
-<div id="board"></div>
+    </div>
 
 
-<!-- CONTROLS -->
+    <!-- BOARD ELEMENT -->
 
-<div class="controls">
-
-    <button class="btn" onclick="restartGame()">
-
-        🔄 Restart Game
-
-    </button>
+    <div id="board"></div>
 
 
-    <button class="btn" onclick="undoMove()">
+    <!-- CONTROLS -->
 
-        ↩️ Undo Move
+    <div class="controls">
 
-    </button>
+        <button class="btn" onclick="restartGame()">🔄 Restart Game</button>
 
-</div>
+        <button class="btn" onclick="undoMove()">↩️ Undo Move</button>
 
-
-<!-- RESULT -->
-
-<div id="result">
-
-    <div class="resultEmoji" id="resultEmoji"></div>
+    </div>
 
 
-    <h2 class="resultTitle" id="resultTitle"></h2>
+    <!-- RESULT BOX -->
 
+    <div id="result">
 
-    <p class="resultMessage" id="resultMessage"></p>
+        <div class="resultEmoji" id="resultEmoji"></div>
 
+        <h2 class="resultTitle" id="resultTitle"></h2>
 
-    <button class="btn" onclick="restartGame()" style="margin-top: 10px;">
+        <p class="resultMessage" id="resultMessage"></p>
 
-        🔄 Play Again
+        <button class="btn" onclick="restartGame()" style="margin-top: 10px;">🔄 Play Again</button>
 
-    </button>
-
-</div>
+    </div>
 
 
 </div>
 
 
-<!-- Dependencies: jQuery, Chess.js, Chessboard.js -->
+<!-- REQUIRED LIBRARIES -->
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 
-<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 
 
 <script>
@@ -417,13 +348,10 @@ let game = new Chess();
 
 let playerColor = 'w';
 
-const statusEl = $('#status');
 
-
-function onDragStart (source, piece, position, orientation) {
+function onDragStart (source, piece) {
 
     if (game.game_over()) return false;
-
 
     if ((playerColor === 'w' && piece.search(/^b/) !== -1) ||
 
@@ -440,7 +368,6 @@ function makeAIMove () {
 
     const possibleMoves = game.moves();
 
-
     if (possibleMoves.length === 0) return;
 
 
@@ -449,7 +376,6 @@ function makeAIMove () {
     game.move(possibleMoves[randomIdx]);
 
     board.position(game.fen());
-
 
     updateStatus();
 
@@ -503,15 +429,7 @@ function updateStatus () {
 
     if (game.in_checkmate()) {
 
-        if (currentTurn !== playerColor) {
-
-            showResult(true);
-
-        } else {
-
-            showResult(false);
-
-        }
+        showResult(currentTurn !== playerColor);
 
         return;
 
@@ -521,27 +439,14 @@ function updateStatus () {
 
     } else {
 
-        if (currentTurn === playerColor) {
+        status = (currentTurn === playerColor) ? "Your turn to move! ✨" : "Opponent thinking... 🤔";
 
-            status = "Your turn to move! ✨";
-
-        } else {
-
-            status = "Opponent is thinking... 🤔";
-
-        }
-
-
-        if (game.in_check()) {
-
-            status += ' (Check! ⚠️)';
-
-        }
+        if (game.in_check()) status += ' (Check! ⚠️)';
 
     }
 
 
-    statusEl.html(status);
+    $('#status').html(status);
 
 }
 
@@ -557,11 +462,7 @@ function showResult(playerWon) {
 
         $('#resultTitle').text('YOU WON!');
 
-        $('#resultMessage').text(
-
-            "Checkmate! You won my heart all over again! 👑💖 Happy Anniversary, my love!"
-
-        );
+        $('#resultMessage').text("Checkmate! You won my heart all over again! 👑💖 Happy Anniversary, my love!");
 
     } else {
 
@@ -569,16 +470,9 @@ function showResult(playerWon) {
 
         $('#resultTitle').text('YOU LOST!');
 
-        $('#resultMessage').text(
-
-            "Oh no! You lost! 😭 Loss Penalty: You have to let me bite you for at least 3 seconds! 😬😬💕"
-
-        );
+        $('#resultMessage').text("Oh no! You lost! 😭 Loss Penalty: You have to let me bite you for at least 3 seconds! 😬😬💕");
 
     }
-
-
-    document.getElementById('result').scrollIntoView({ behavior: "smooth" });
 
 }
 
@@ -596,9 +490,9 @@ function changePlayerColor() {
 
 function undoMove() {
 
-    game.undo(); // Undo AI move
+    game.undo();
 
-    game.undo(); // Undo Player move
+    game.undo();
 
     board.position(game.fen());
 
@@ -630,31 +524,34 @@ function restartGame() {
 }
 
 
-// Load pieces from reliable external CDN
+// Initialize when DOM is fully loaded
 
-const config = {
+$(document).ready(function() {
 
-    draggable: true,
+    const config = {
 
-    position: 'start',
+        draggable: true,
 
-    orientation: 'white',
+        position: 'start',
 
-    pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+        orientation: 'white',
 
-    onDragStart: onDragStart,
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
 
-    onDrop: onDrop,
+        onDragStart: onDragStart,
 
-    onSnapEnd: onSnapEnd
+        onDrop: onDrop,
 
-};
+        onSnapEnd: onSnapEnd
+
+    };
 
 
-board = Chessboard('board', config);
+    board = Chessboard('board', config);
 
+    updateStatus();
 
-updateStatus();
+});
 
 
 </script>
