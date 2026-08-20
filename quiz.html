@@ -114,12 +114,11 @@
   </div>
 
   <script>
-    // Customize your questions, options, and correct answers here
     const quizData = [
-       {
-    question: "0. How well do you know your girlfriend?",
+      {
+        question: "0. How well do you know your girlfriend?",
         options: ["Pretty well", "Really well", "Better than anyone", "I'm about to find out"],
-        correct: 4
+        correct: 3 // Fixed 0-based index: 3 points to "I'm about to find out"
       },
       {
         question: "1. Where was our very first official date?",
@@ -143,7 +142,7 @@
       },
       {
         question: "5. What is our official anniversary date?",
-        options: ["January 14", "June 20", "October 5", "August 21"], // Edit as needed!
+        options: ["January 14", "June 20", "October 5", "August 21"],
         correct: 3
       },
       {
@@ -156,8 +155,6 @@
         options: ["Red", "Pink", "Green", "Black"],
         correct: 2
       },
-
-      // Questions about "Me"
       {
         question: "8. Which app do I tell you to use but you don't check?",
         options: ["X", "Facebook", "Flame", "circle360"],
@@ -169,7 +166,7 @@
         correct: 3
       },
       {
-    question: "10. Who is more dramatic ?",
+        question: "10. Who is more dramatic ?",
         options: ["definitely you", "Neither.... supposedly", "Both equally", "Me (Your love)"],
         correct: 3
       },
@@ -184,7 +181,7 @@
         correct: 0
       },
       {
-      question: "13. Where did we meet first?",
+        question: "13. Where did we meet first?",
         options: ["Broadway", "Atlantic/Barclay Center", "Far Rock", "Jamaica"],
         correct: 3
       },
@@ -193,8 +190,8 @@
         options: ["Art", "English", "History", "Science"],
         correct: 0
       },
-        {
-        question: "15. When I said /"I'm fine/" what does it usually mean?",
+      {
+        question: "15. When I said \"I'm fine\" what does it usually mean?",
         options: ["I'm completely fine", "Nothing is wrong", "Figure it out", "You should probably apologize just in case"],
         correct: 3
       },
@@ -208,7 +205,7 @@
         options: ["Both", "Me (your perfect cute little girlfriend)", "You", "Neither of us"],
         correct: 1
       },
-    {
+      {
         question: "18. Who made me fall in love with all the details he has that made me impossible not to look how cute he is?",
         options: ["Tom", "Spiderman", "You, silly dummy cute handsome guy, that is totally mine", "The Neightboor"],
         correct: 2
@@ -218,38 +215,36 @@
         options: ["Your smile 😊", "Your sense of humor 😂", "How caring you are ❤️", "All of the above! 🥰"],
         correct: 3
       },
-    {    
-    question: "20. Where did we go pitching by ourself?",
+      {
+        question: "20. Where did we go pitching by ourself?",
         options: ["Jamaica", "Atlantic/Barclay Center", "149th", "Parkchester"],
         correct: 1
       },
-    {
-    question: "21. Who said I love you first?",
+      {
+        question: "21. Who said I love you first?",
         options: ["You", "Both at the same time", "Diana", "Me (your love)"],
         correct: 0
       },
-    {
-    question: "22. What is my favorite thing to do with you?",
-        options: ["Going on dates outside", "Eat together", 
-                  "Have in-house dates (just spending time lying down/playing games)", "All above"],
+      {
+        question: "22. What is my favorite thing to do with you?",
+        options: ["Going on dates outside", "Eat together", "Have in-house dates (just spending time lying down/playing games)", "All above"],
         correct: 3
       },
-    {
-    question: "23. Who is more likely to fall asleep first ?",
+      {
+        question: "23. Who is more likely to fall asleep first ?",
         options: ["You", "None of us", "Both", "Me (Your love)"],
         correct: 0
       },
-    {
-    question: "24. Who is more likely to say /"I'm not mad/" while clearly being mad?",
+      {
+        question: "24. Who is more likely to say \"I'm not mad\" while clearly being mad?",
         options: ["Absolutely You", "Both", "Me (Your love)", "None"],
         correct: 0
       },
-    {
-    question: "25. Who took my first time👉👈?",
+      {
+        question: "25. Who took my first time👉👈?",
         options: ["My ex", "Definitely You", "Almost you", "no one"],
         correct: 2
       }
-
     ];
 
     let currentQuestion = 0;
@@ -276,7 +271,7 @@
     }
 
     function selectOption(selectedIndex) {
-      if (selectedIndex === quizData[currentQuestion].answer) {
+      if (selectedIndex === quizData[currentQuestion].correct) {
         score++;
       }
 
