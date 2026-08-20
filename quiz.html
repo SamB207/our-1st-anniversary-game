@@ -220,7 +220,7 @@
       },
       {
         question: "18. Who made me fall in love with all the details he has that made it impossible not to look at how cute he is?",
-        options: ["Tom", "Spiderman", "You, silly dummy cute handsome guy, that is totally mine", "The Neightboor"],
+        options: ["Tom", "Spiderman", "You, silly dummy cute handsome guy, that is totally mine", "The Neighbor"],
         correct: 2
       },
       {
@@ -290,17 +290,12 @@
       isAnswering = true;
 
       const correctIndex = quizData[currentQuestion].correct;
-      const buttons = optionsContainerEl.querySelectorAll(".option-btn");
 
       if (selectedIndex === correctIndex) {
         score++;
         selectedBtn.classList.add("correct");
       } else {
         selectedBtn.classList.add("wrong");
-        // Highlight the correct answer in green as well
-        if (buttons[correctIndex]) {
-          buttons[correctIndex].classList.add("correct");
-        }
       }
 
       // Delay loading the next question so the user sees the color effect
