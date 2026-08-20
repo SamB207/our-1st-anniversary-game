@@ -401,14 +401,14 @@ h1 {
 
 const questions = [
 
-      {
+    {
     question: "0. How well do you know your girlfriend?",
         options: ["Pretty well", "Really well", "Better than anyone", "I'm about to find out"],
         correct: 4
       },
       {
         question: "1. Where was our very first official date?",
-        options: ["Burger place", "roof top", "Bryan Park", "Pool night"],
+        options: ["Burger place", "rooftop", "Bryan Park", "Pool night"],
         correct: 1
       },
       {
@@ -494,7 +494,7 @@ const questions = [
         correct: 1
       },
     {
-        question: "18. Who made me fall in love with all the details he has that made me impossible not to look how cute he is?",
+        question: "18. Who made me fall in love with all the details he has that made it impossible not to look at how cute he is?",
         options: ["Tom", "Spiderman", "You, silly dummy cute handsome guy, that is totally mine", "The Neightboor"],
         correct: 2
       },
@@ -504,7 +504,7 @@ const questions = [
         correct: 3
       },
     {    
-    question: "20. Where did we go pitching by ourself?",
+    question: "20. Where did we go pitching by ourselves?",
         options: ["Jamaica", "Atlantic/Barclay Center", "149th", "Parkchester"],
         correct: 1
       },
@@ -525,7 +525,7 @@ const questions = [
         correct: 0
       },
     {
-    question: "24. Who is more likely to say /"I'm not mad/" while clearly being mad?",
+    question: "24. Who is more likely to say, I'm not mad, while clearly being mad?",
         options: ["Absolutely You", "Both", "Me (Your love)", "None"],
         correct: 0
       },
@@ -534,47 +534,66 @@ const questions = [
         options: ["My ex", "Definitely You", "Almost you", "no one"],
         correct: 2
       },
-    // Add more questions here! No limit needed.
-
 ];
 
 
 /* ==========================================
-   AUDIO SYNTHESIZERS (NO EXTERNAL FILES)
+   AUDIO SYNTHESIZERS (SAFE LAZY INITIALIZATION)
 ========================================== */
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx = null;
+
+
+function initAudio() {
+
+    if (!audioCtx) {
+
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    }
+
+    if (audioCtx.state === 'suspended') {
+
+        audioCtx.resume();
+
+    }
+
+}
 
 
 function playNote(freq, type, duration, delay = 0) {
 
     setTimeout(() => {
 
-        if (audioCtx.state === 'suspended') {
+        try {
 
-            audioCtx.resume();
+            initAudio();
+
+            const osc = audioCtx.createOscillator();
+
+            const gain = audioCtx.createGain();
+
+            osc.type = type;
+
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+
+            osc.stop(audioCtx.currentTime + duration);
+
+        } catch (e) {
+
+            console.log("Audio play error:", e);
 
         }
-
-        const osc = audioCtx.createOscillator();
-
-        const gain = audioCtx.createGain();
-
-        osc.type = type;
-
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
-        osc.connect(gain);
-
-        gain.connect(audioCtx.destination);
-
-        osc.start();
-
-        osc.stop(audioCtx.currentTime + duration);
 
     }, delay);
 
@@ -624,6 +643,15 @@ let canSelect = true;
 
 function loadQuestion() {
 
+    if (!questions || questions.length === 0) {
+
+        document.getElementById("questionText").textContent = "No questions found!";
+
+        return;
+
+    }
+
+
     const currentQ = questions[currentQuestionIndex];
 
     
@@ -664,6 +692,9 @@ function selectOption(selectedIndex) {
     if (!canSelect) return;
 
     canSelect = false;
+
+
+    initAudio(); // Initialize audio context on first user click
 
 
     const currentQ = questions[currentQuestionIndex];
@@ -811,9 +842,13 @@ function restartQuiz() {
 }
 
 
-// Initialize
+// Run when page DOM is ready
 
-loadQuestion();
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadQuestion();
+
+});
 
 
 </script>
