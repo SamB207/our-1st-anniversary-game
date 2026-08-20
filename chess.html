@@ -353,6 +353,8 @@ function onDragStart (source, piece) {
 
     if (game.game_over()) return false;
 
+    // Only prevent dragging the opponent's pieces
+
     if ((playerColor === 'w' && piece.search(/^b/) !== -1) ||
 
         (playerColor === 'b' && piece.search(/^w/) !== -1)) {
@@ -366,7 +368,7 @@ function onDragStart (source, piece) {
 
 function makeAIMove () {
 
-    const possibleMoves = game.moves();
+    const possibleMoves = game.moves({ verbose: true });
 
     if (possibleMoves.length === 0) return;
 
@@ -387,7 +389,11 @@ function onDrop (source, target) {
     if (game.turn() !== playerColor) return 'snapback';
 
 
-    const move = game.move({
+    // FREE-MOVE OVERRIDE: 
+
+    // Allows player to move any piece regardless of check state.
+
+    let move = game.move({
 
         from: source,
 
@@ -398,7 +404,51 @@ function onDrop (source, target) {
     });
 
 
-    if (move === null) return 'snapback';
+    // If the standard engine rejects the move (e.g. King is in check), 
+
+    // force place the piece to bypass the illegal move rule.
+
+    if (move === null) {
+
+        let boardState = game.board();
+
+        let sourcePiece = null;
+
+
+        // Find source piece
+
+        for (let r = 0; r < 8; r++) {
+
+            for (let c = 0; c < 8; c++) {
+
+                let p = boardState[r][c];
+
+                if (p && (String.fromCharCode(97 + c) + (8 - r)) === source) {
+
+                    sourcePiece = p;
+
+                }
+
+            }
+
+        }
+
+
+        if (sourcePiece && sourcePiece.color === playerColor) {
+
+            game.remove(source);
+
+            game.put({ type: sourcePiece.type, color: sourcePiece.color }, target);
+
+            board.position(game.fen());
+
+        } else {
+
+            return 'snapback';
+
+        }
+
+    }
 
 
     updateStatus();
