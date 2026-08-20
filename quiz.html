@@ -84,11 +84,24 @@
       border-radius: 12px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s ease;
     }
 
     .option-btn:hover {
       background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Feedback Styles */
+    .option-btn.correct {
+      background-color: #2e7d32 !important;
+      border-color: #4caf50 !important;
+      color: #ffffff !important;
+    }
+
+    .option-btn.wrong {
+      background-color: #c62828 !important;
+      border-color: #ef5350 !important;
+      color: #ffffff !important;
     }
 
     .score-text {
@@ -118,7 +131,7 @@
       {
         question: "0. How well do you know your girlfriend?",
         options: ["Pretty well", "Really well", "Better than anyone", "I'm about to find out"],
-        correct: 3 // Fixed 0-based index: 3 points to "I'm about to find out"
+        correct: 3
       },
       {
         question: "1. Where was our very first official date?",
@@ -249,6 +262,7 @@
 
     let currentQuestion = 0;
     let score = 0;
+    let isAnswering = false;
 
     const questionNumberEl = document.getElementById("question-number");
     const questionTextEl = document.getElementById("question-text");
@@ -256,6 +270,7 @@
     const quizCardEl = document.getElementById("quiz-card");
 
     function loadQuestion() {
+      isAnswering = false;
       const q = quizData[currentQuestion];
       questionNumberEl.textContent = `QUESTION ${currentQuestion + 1} OF ${quizData.length}`;
       questionTextEl.textContent = q.question;
@@ -265,23 +280,38 @@
         const btn = document.createElement("button");
         btn.className = "option-btn";
         btn.textContent = option;
-        btn.onclick = () => selectOption(index);
+        btn.onclick = (e) => selectOption(index, e.target);
         optionsContainerEl.appendChild(btn);
       });
     }
 
-    function selectOption(selectedIndex) {
-      if (selectedIndex === quizData[currentQuestion].correct) {
+    function selectOption(selectedIndex, selectedBtn) {
+      if (isAnswering) return; // Prevent double-clicking
+      isAnswering = true;
+
+      const correctIndex = quizData[currentQuestion].correct;
+      const buttons = optionsContainerEl.querySelectorAll(".option-btn");
+
+      if (selectedIndex === correctIndex) {
         score++;
-      }
-
-      currentQuestion++;
-
-      if (currentQuestion < quizData.length) {
-        loadQuestion();
+        selectedBtn.classList.add("correct");
       } else {
-        showResults();
+        selectedBtn.classList.add("wrong");
+        // Highlight the correct answer in green as well
+        if (buttons[correctIndex]) {
+          buttons[correctIndex].classList.add("correct");
+        }
       }
+
+      // Delay loading the next question so the user sees the color effect
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          loadQuestion();
+        } else {
+          showResults();
+        }
+      }, 1200);
     }
 
     function showResults() {
