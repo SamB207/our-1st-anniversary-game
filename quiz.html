@@ -257,6 +257,66 @@
         question: "25. Who took my first time👉👈?",
         options: ["My ex", "Definitely You", "Almost you", "no one"],
         correct: 2
+      },
+       {
+        question: "26. If I were an animal, what would I be?",
+        options: ["A panda 🐼", "An agile cat😸",
+                  "A dramatic chihuahua 🐶", "A confused penguin 🐧"],
+        correct: 0
+      },
+      {
+        question: "27. What is my most dramatic phrase?",
+        options: ["I'm done", "I hate you",
+                  "Leave me alone", "Nothing is wrong"],
+        correct: 1
+      },
+      {
+        question: "28. What am I most likely to do when I'm bored?",
+        options: ["Start cleaning", "Watch a new show",
+                  "Start a random new project", "Annoy you"],
+        correct: 3
+      },
+      {
+        question: "29. If I could have one useless talent, what would I choose?",
+        options: ["Talking to animals", "Reading minds",
+                  "Teleporting to food", "Never having to charge my phone"],
+        correct: 0
+      },
+      {
+        question: "30. What happens when I start saying, One more minute?",
+        options: ["One minute and you left", "You ignored me and left",
+                  "You stay to sleep (people can wish)", "It turns to almost 30min"],
+        correct: 3
+      },
+      {
+        question: "31. What would I probably do during a zombie attack?",
+        options: ["Find a shelter", "Hide behind you",
+                  "Kill zombies", "Let you die to escape"],
+        correct: 1
+      },
+      {
+        question: "32. If I have to choose between you and food for one hour?",
+        options: ["Sorry my Bae, food wins", "You win",
+                  "Can I have both?", "Depends what food it is"],
+        correct: 2
+      },
+      {
+        question: "33. What is my biggest enemy when I'm with you?",
+        options: ["Bad wi-fi", "Having to make a decision",
+                  "Being hungry", "A dead phone battery"],
+        correct: 1
+      },
+      {
+        question: "34. What is most likely to happen if I say, I don't care?",
+        options: ["I care a lot", "I truly don't care",
+                  "I care a little", "I already forgot about it"],
+        correct: 0
+      },
+      {
+        question: "35. What am I most likely to do at 2 am?",
+        options: ["Sleep peacefully", "Overthink my entire life",
+                  "Watch around the room", "Play with Loki"],
+        correct: 1
       }
     ];
 
@@ -286,28 +346,29 @@
     }
 
     function selectOption(selectedIndex, selectedBtn) {
-      if (isAnswering) return; // Prevent double-clicking
-      isAnswering = true;
+  if (isAnswering) return; // Prevent double-clicking
+  isAnswering = true;
 
-      const correctIndex = quizData[currentQuestion].correct;
+  const correctIndex = quizData[currentQuestion].correct;
 
-      if (selectedIndex === correctIndex) {
-        score++;
-        selectedBtn.classList.add("correct");
-      } else {
-        selectedBtn.classList.add("wrong");
-      }
+  if (selectedIndex === correctIndex) {
+    score++;
+    selectedBtn.classList.add("correct");
+  } else {
+    // Only turn the clicked button red (no green highlight on the correct answer)
+    selectedBtn.classList.add("wrong");
+  }
 
-      // Delay loading the next question so the user sees the color effect
-      setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < quizData.length) {
-          loadQuestion();
-        } else {
-          showResults();
-        }
-      }, 1200);
+  // Delay loading the next question so the user sees the red/green effect
+  setTimeout(() => {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+      loadQuestion();
+    } else {
+      showResults();
     }
+  }, 1200);
+}
 
     function showResults() {
       quizCardEl.innerHTML = `
